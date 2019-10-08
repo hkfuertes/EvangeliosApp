@@ -6,9 +6,9 @@ import 'package:evangelios/Widgets/LoadingWidget.dart';
 import 'package:evangelios/Widgets/PsalmWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../Parsers/BaseParser.dart';
+import '../Util.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key, this.title}) : super(key: key);
@@ -21,18 +21,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
-  DateFormat _formatter = new DateFormat('EEEE dd MMMM', 'es');
+  DateFormat _formatter = new DateFormat('EEEE dd de MMMM');
   TextsSet _selectedTextsSet;
 
   final int SETTINGS_ID = 0x01;
   final int DIARY_ID = 0x02;
 
   BaseParser _provider = CiudadRedondaParser();
-
-  static const List<Choice> choices = const <Choice>[
-    const Choice(title: 'Diario', icon: Icons.book),
-    const Choice(title: 'Ajustes', icon: Icons.settings),
-  ];
 
   void initState() {
     super.initState();
@@ -76,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<DateTime> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
-        locale: Locale("es"),
+        locale: Locale('es', 'ES'),
         context: context,
         initialDate: _selectedDate,
         firstDate: DateTime(2018),
@@ -143,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          _formatter.format(_selectedDate),
+          Util.getFullDateSpanish(_selectedDate),
         ),
         actions: <Widget>[
           IconButton(
@@ -179,18 +174,12 @@ class _MainScreenState extends State<MainScreen> {
           ? _buildMainLayout(context, _selectedTextsSet)
           : LoadingWidget("cargando..."),
       //drawer: _buildDrawer(),
-      /*
+/*
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.edit),
+        child: Icon(Icons.calendar_today),
         onPressed: () {},
-      ),*/
+      ),
+      */
     );
   }
-}
-
-class Choice {
-  const Choice({this.title, this.icon});
-
-  final String title;
-  final IconData icon;
 }

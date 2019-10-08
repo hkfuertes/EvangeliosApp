@@ -1,5 +1,7 @@
 import 'package:evangelios/Screens/mainScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -13,8 +15,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
+      localizationsDelegates: [
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate, // if it's a RTL language
+  ],
+  supportedLocales: [
+    const Locale('es', 'ES'), // include country code too
+  ],
       home: MainScreen(title: 'Evangelio'),
     );
   }
 }
-
