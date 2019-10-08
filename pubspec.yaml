@@ -20,6 +20,7 @@ dependencies:
   intl:
   html:
   http:
+  font_awesome_flutter:
   flutter_markdown:
   flutter:
     sdk: flutter

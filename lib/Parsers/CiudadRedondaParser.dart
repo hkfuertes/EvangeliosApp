@@ -16,10 +16,10 @@ class CiudadRedondaParser extends BaseParser {
           null,
           getText(texts[0]),
           getTextIndex(texts[0]),
-          getText(texts[1]),
-          getTextIndex(texts[1]),
-          getPsalm(texts[2]),
-          getPsalmIndex(texts[2]),
+          getText(texts[2]),
+          getTextIndex(texts[2]),
+          getPsalm(texts[1]),
+          getPsalmIndex(texts[1]),
           getPsalmResponse(texts[1]),
           getText(texts[3]),
           getTextIndex(texts[3]));
@@ -50,7 +50,8 @@ class CiudadRedondaParser extends BaseParser {
         .replaceAll("<br>", "\n")
         .replaceAll(getPsalmIndex(element), "")
         .replaceAll(getPsalmResponse(element), "")
-        .replaceAll("R/.", "")
+        //.replaceAll("R/.", "")
+        //.replaceAll("V/. ", "")
         .trim();
   }
 
@@ -62,20 +63,37 @@ class CiudadRedondaParser extends BaseParser {
   }
 
   String getPsalmResponse(Element element) {
-    return element.querySelector("i").text.trim();
+    return "R/. "+element.querySelector("i").text.trim();
   }
 
   String getText(Element element) {
     return element.innerHtml
         //.replaceAll("\n", "")
+        .replaceAll("</b>.<br>", "</b><br>")
         .replaceAll("<br>", "\n")
         .replaceAll(element.querySelector("b").outerHtml, "")
         .replaceAll("<b>Palabra de Dios</b>", "")
         .replaceAll("<b>Palabra del Señor</b>", "")
+        .replaceAll(super.stripHtmlTagsRegex, "")
         .trim();
   }
 
   String getTextIndex(Element element) {
     return element.querySelector("b").text.replaceAll(":", "");
+  }
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(
+      r"<[^>]*>",
+      multiLine: true,
+      caseSensitive: true
+    );
+
+    return htmlText.replaceAll(exp, '');
+  }
+
+  @override
+  String getProviderNameForDisplay() {
+    return "www.ciudadredonda.org";
   }
 }

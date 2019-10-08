@@ -17,6 +17,6 @@ class PsalmWidget  extends StatelessWidget {
   String formatMarkDown(String text, String index, String response){
     return "## "+index+"\n\n"+
     "**_"+response+"_**\n\n"+
-    text;
+    text.replaceAll("R/.", "**R/.**");
   }
 }

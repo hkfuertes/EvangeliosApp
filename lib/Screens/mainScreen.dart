@@ -2,9 +2,13 @@ import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/CiudadRedondaParser.dart';
 import 'package:evangelios/Widgets/GodspellWidget.dart';
 import 'package:evangelios/Widgets/LectureWidget.dart';
+import 'package:evangelios/Widgets/LoadingWidget.dart';
 import 'package:evangelios/Widgets/PsalmWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../Parsers/BaseParser.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key, this.title}) : super(key: key);
@@ -18,24 +22,117 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
   DateFormat _formatter = new DateFormat('EEEE dd MMMM');
+  TextsSet _selectedTextsSet;
+
+  final int SETTINGS_ID = 0x01;
+  final int DIARY_ID = 0x02;
+
+  BaseParser _provider = CiudadRedondaParser();
+
+  static const List<Choice> choices = const <Choice>[
+    const Choice(title: 'Diario', icon: Icons.book),
+    const Choice(title: 'Ajustes', icon: Icons.settings),
+  ];
+
+  void initState() {
+    super.initState();
+    _provider.get(_selectedDate).then((texts) {
+      setState(() {
+        _selectedTextsSet = texts;
+      });
+    });
+  }
 
   //https://stackoverflow.com/questions/51607440/horizontally-scrollable-cards-with-snap-effect-in-flutter
 
   Widget _buildMainLayout(BuildContext context, TextsSet textsSet) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            LectureWidget(textsSet.first, textsSet.firstIndex),
-            Divider(),
-            PsalmWidget(textsSet.psalm, textsSet.psalmIndex, textsSet.psalmResponse),
-            Divider(),
-            LectureWidget(textsSet.first, textsSet.firstIndex),
-            Divider(),
-            GodspellWidget(textsSet.godspel, textsSet.godspelIndex)
-          ],
-        ),
+    double spaceForCopyRight = 10;
+    TextStyle copyRightStyle = TextStyle(fontSize: 10, color: Colors.grey);
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(children: <Widget>[
+          LectureWidget(textsSet.first, textsSet.firstIndex),
+          Divider(),
+          PsalmWidget(
+              textsSet.psalm, textsSet.psalmIndex, textsSet.psalmResponse),
+          Divider(),
+          (textsSet.second != null)
+              ? LectureWidget(textsSet.second, textsSet.secondIndex)
+              : Container(),
+          (textsSet.second != null) ? Divider() : Container(),
+          GodspellWidget(textsSet.godspel, textsSet.godspelIndex),
+          Container(
+            height: spaceForCopyRight,
+          ),
+          Text(
+            _provider.getProviderNameForDisplay(),
+            style: copyRightStyle,
+          )
+        ]),
+      ),
+    );
+  }
+
+  Future<DateTime> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _selectedDate,
+        firstDate: DateTime(2018),
+        lastDate: DateTime(2100));
+    return picked == null ? _selectedDate : picked;
+  }
+
+  Widget _buildDrawer() {
+    return Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Container(
+              color: Theme.of(context).primaryColor,
+              height: MediaQuery.of(context).padding.top + 5),
+          Container(
+            color: Theme.of(context).primaryColor,
+            child: ListTile(
+              dense: true,
+              title: Text(
+                'Evangelios',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.white),
+              ),
+              //subtitle: Text(_provider.getProviderNameForDisplay(), style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),),
+              leading: CircleAvatar(
+                child: Icon(Icons.book),
+              ),
+            ),
+          ),
+          Container(
+            height: 2,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          ListTile(
+            title: Text('Diario'),
+            leading: Icon(Icons.book),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+          ListTile(
+            title: Text('Ajustes'),
+            leading: Icon(Icons.settings),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+        ],
       ),
     );
   }
@@ -44,28 +141,55 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        //elevation: 0,
         title: Text(
           _formatter.format(_selectedDate),
-          //style: TextStyle(color: Colors.black),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () {
+              _selectDate(context).then(_provider.get).then((texts) {
+                setState(() {
+                  _selectedDate = texts.date;
+                  _selectedTextsSet = texts;
+                });
+              });
+            },
           ),
+          /*
+          PopupMenuButton<int>(
+              onSelected: (choice) {},
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<int>(
+                    value: this.DIARY_ID,
+                    child: Text("Diario"),
+                  ),
+                  PopupMenuItem<int>(
+                    value: this.SETTINGS_ID,
+                    child: Text("Ajustes"),
+                  ),
+                ];
+              }),
+              */
+        ],
       ),
-      body: FutureBuilder<TextsSet>(
-        future: CiudadRedondaParser().get(_selectedDate),
-        builder: (BuildContext context, AsyncSnapshot<TextsSet> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return Text('Esperando resultado...');
-            case ConnectionState.done:
-              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-              return _buildMainLayout(context, snapshot.data);
-          }
-          return null;
-        },
-      ),
+      body: _selectedTextsSet != null
+          ? _buildMainLayout(context, _selectedTextsSet)
+          : LoadingWidget("cargando..."),
+      //drawer: _buildDrawer(),
+      /*
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.edit),
+        onPressed: () {},
+      ),*/
     );
   }
+}
+
+class Choice {
+  const Choice({this.title, this.icon});
+
+  final String title;
+  final IconData icon;
 }
