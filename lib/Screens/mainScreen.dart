@@ -21,7 +21,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
-  DateFormat _formatter = new DateFormat('EEEE dd MMMM');
+  DateFormat _formatter = new DateFormat('EEEE dd MMMM', 'es');
   TextsSet _selectedTextsSet;
 
   final int SETTINGS_ID = 0x01;
@@ -76,6 +76,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<DateTime> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
+        locale: Locale("es"),
         context: context,
         initialDate: _selectedDate,
         firstDate: DateTime(2018),
