@@ -20,4 +20,21 @@ class TextsSet {
   void setDate(DateTime date) {
     this.date = date;
   }
+
+  String getFirstMarkDown(){
+    return "## "+firstIndex+"\n\n"+first + "\n\n**Palabra de Dios**";
+  }
+
+  String getSecondMarkDown(){
+        return "## "+secondIndex+"\n\n"+second+"\n\n**Palabra de Dios**";
+
+  }
+  String getGodspelMarkDown(){
+    return "## "+godspelIndex+"\n\n"+godspel+"\n\n**Palabra del Señor**";
+  }
+  String getPsalmMarkDown(){
+    return "## "+psalmIndex+"\n\n"+
+    "**_"+psalmResponse+"_**\n\n"+
+    psalm.replaceAll("R/.", "**R/.**");
+  }
 }

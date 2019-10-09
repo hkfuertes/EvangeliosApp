@@ -1,11 +1,11 @@
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/BuigleProvider.dart';
 import 'package:evangelios/Parsers/CiudadRedondaProvider.dart';
-import 'package:evangelios/Widgets/GodspellWidget.dart';
-import 'package:evangelios/Widgets/LectureWidget.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
-import 'package:evangelios/Widgets/PsalmWidget.dart';
+import 'package:evangelios/Widgets/ScriptWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../Parsers/Provider.dart';
@@ -25,10 +25,12 @@ class _MainScreenState extends State<MainScreen> {
   DateFormat _formatter = new DateFormat('EEEE dd de MMMM');
   TextsSet _selectedTextsSet;
 
+  double _scaleFactor = 120;
+
   final int SETTINGS_ID = 0x01;
   final int DIARY_ID = 0x02;
 
-  Provider _provider = Provider.getInstance("Buigle");
+  Provider _provider = Provider.getInstance("CiudadRedonda");
 
   void initState() {
     super.initState();
@@ -48,23 +50,28 @@ class _MainScreenState extends State<MainScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(children: <Widget>[
-          LectureWidget(textsSet.first, textsSet.firstIndex),
+          ScriptWidget(
+            textsSet.getFirstMarkDown(),
+            zoomFactor: _scaleFactor,
+          ),
           Divider(),
-          PsalmWidget(
-              textsSet.psalm, textsSet.psalmIndex, textsSet.psalmResponse),
+          ScriptWidget(textsSet.getPsalmMarkDown(), zoomFactor: _scaleFactor),
           Divider(),
           (textsSet.second != null)
-              ? LectureWidget(textsSet.second, textsSet.secondIndex)
+              ? ScriptWidget(textsSet.getSecondMarkDown(),
+                  zoomFactor: _scaleFactor)
               : Container(),
           (textsSet.second != null) ? Divider() : Container(),
-          GodspellWidget(textsSet.godspel, textsSet.godspelIndex),
+          ScriptWidget(textsSet.getGodspelMarkDown(), zoomFactor: _scaleFactor),
           Container(
             height: spaceForCopyRight,
           ),
-          Text(
-            _provider.getProviderNameForDisplay(),
-            style: copyRightStyle,
-          )
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+            Text(
+              _provider.getProviderNameForDisplay(),
+              style: copyRightStyle,
+            ),
+          ])
         ]),
       ),
     );
@@ -80,107 +87,101 @@ class _MainScreenState extends State<MainScreen> {
     return picked == null ? _selectedDate : picked;
   }
 
-  Widget _buildDrawer() {
-    return Drawer(
-      // Add a ListView to the drawer. This ensures the user can scroll
-      // through the options in the drawer if there isn't enough vertical
-      // space to fit everything.
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          Container(
-              color: Theme.of(context).primaryColor,
-              height: MediaQuery.of(context).padding.top + 5),
-          Container(
-            color: Theme.of(context).primaryColor,
-            child: ListTile(
-              dense: true,
-              title: Text(
-                'Evangelios',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white),
-              ),
-              //subtitle: Text(_provider.getProviderNameForDisplay(), style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic),),
-              leading: CircleAvatar(
-                child: Icon(Icons.book),
-              ),
-            ),
-          ),
-          Container(
-            height: 2,
-            color: Theme.of(context).primaryColorDark,
-          ),
-          ListTile(
-            title: Text('Diario'),
-            leading: Icon(Icons.book),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title: Text('Ajustes'),
-            leading: Icon(Icons.settings),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).scaffoldBackgroundColor));
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          Util.getFullDateSpanish(_selectedDate),
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () {
-              _selectDate(context).then(_provider.get).then((texts) {
-                setState(() {
-                  _selectedDate = texts.date;
-                  _selectedTextsSet = texts;
-                });
+        brightness: Brightness.light,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: FlatButton(
+          onPressed: () {
+            _selectDate(context).then(_provider.get).then((texts) {
+              setState(() {
+                _selectedDate = texts.date;
+                _selectedTextsSet = texts;
               });
-            },
+            });
+          },
+          child: Text(
+            Util.getFullDateSpanish(_selectedDate),
+            style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 24),
           ),
-          /*
-          PopupMenuButton<int>(
-              onSelected: (choice) {},
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem<int>(
-                    value: this.DIARY_ID,
-                    child: Text("Diario"),
-                  ),
-                  PopupMenuItem<int>(
-                    value: this.SETTINGS_ID,
-                    child: Text("Ajustes"),
-                  ),
-                ];
-              }),
-              */
-        ],
+        ),
       ),
       body: _selectedTextsSet != null
           ? _buildMainLayout(context, _selectedTextsSet)
           : LoadingWidget("cargando..."),
       //drawer: _buildDrawer(),
-/*
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.calendar_today),
+        child: Icon(Icons.edit),
         onPressed: () {},
       ),
-      */
+
+      bottomNavigationBar: Container(
+        child: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.settings,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {},
+                  ),
+                  
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.listAlt,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {},
+                  ),
+                  
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.searchPlus,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                       _scaleFactor+=10; 
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      FontAwesomeIcons.searchMinus,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                       _scaleFactor-=10; 
+                      });
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

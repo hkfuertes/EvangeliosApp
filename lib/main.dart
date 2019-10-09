@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Evangelio',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.brown,
       ),
       localizationsDelegates: [
     GlobalMaterialLocalizations.delegate,
