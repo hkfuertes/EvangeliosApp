@@ -24,10 +24,10 @@ class Util{
     ];
 
     static String getDayOfWeekSpanish(DateTime date){
-      return days[date.weekday];
+      return days[date.weekday -1];
     }
     static String getMonthSpanish(DateTime date){
-      return months[date.month];
+      return months[date.month -1];
     }
 
     static String getFullDateSpanish(DateTime date){

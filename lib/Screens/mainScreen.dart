@@ -1,4 +1,5 @@
 import 'package:evangelios/Model/TextsSet.dart';
+import 'package:evangelios/Parsers/BuigleProvider.dart';
 import 'package:evangelios/Parsers/CiudadRedondaParser.dart';
 import 'package:evangelios/Widgets/GodspellWidget.dart';
 import 'package:evangelios/Widgets/LectureWidget.dart';
@@ -7,7 +8,7 @@ import 'package:evangelios/Widgets/PsalmWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../Parsers/BaseParser.dart';
+import '../Parsers/Provider.dart';
 import '../Util.dart';
 
 class MainScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   final int SETTINGS_ID = 0x01;
   final int DIARY_ID = 0x02;
 
-  BaseParser _provider = CiudadRedondaParser();
+  Provider _provider = BuigleProvider();
 
   void initState() {
     super.initState();

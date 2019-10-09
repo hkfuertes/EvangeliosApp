@@ -3,11 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:html/parser.dart' as Parser;
 import 'package:html/dom.dart';
 
-import 'BaseParser.dart';
+import 'Provider.dart';
 
-class CiudadRedondaParser extends BaseParser {
+class CiudadRedondaProvider extends Provider {
   @override
-  Future<TextsSet> parse(String body) async {
+  TextsSet parse(String body) {
     var document = Parser.parse(body);
     List<Element> texts = document.querySelectorAll('div.texto_palabra');
     if (texts.length > 3) {
