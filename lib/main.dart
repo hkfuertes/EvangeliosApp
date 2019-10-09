@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   supportedLocales: [
     const Locale('es', 'ES'), // include country code too
   ],
-      home: MainScreen(title: 'Evangelio'),
+      home: MainScreen(),
     );
   }
 }

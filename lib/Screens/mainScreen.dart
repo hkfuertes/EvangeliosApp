@@ -1,20 +1,19 @@
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/BuigleProvider.dart';
 import 'package:evangelios/Parsers/CiudadRedondaProvider.dart';
+import 'package:evangelios/Screens/listScreen.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
 import 'package:evangelios/Widgets/ScriptWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 
 import '../Parsers/Provider.dart';
 import '../Util.dart';
+import 'editScreen.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
+  static final String PAGE_NAME = "MAIN_PAGE";
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -22,7 +21,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
-  DateFormat _formatter = new DateFormat('EEEE dd de MMMM');
   TextsSet _selectedTextsSet;
 
   double _scaleFactor = 120;
@@ -30,7 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   final int SETTINGS_ID = 0x01;
   final int DIARY_ID = 0x02;
 
-  Provider _provider = Provider.getInstance("CiudadRedonda");
+  Provider _provider = CiudadRedondaProvider();
+
+  int _radioProvider = 0;
 
   void initState() {
     super.initState();
@@ -123,7 +123,13 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.edit),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditScreen(this._selectedTextsSet)),
+          );
+        },
       ),
 
       bottomNavigationBar: Container(
@@ -140,17 +146,22 @@ class _MainScreenState extends State<MainScreen> {
                       Icons.settings,
                       color: Theme.of(context).primaryColorDark,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      _settingModalBottomSheet(context);
+                    },
                   ),
-                  
                   IconButton(
                     icon: Icon(
                       FontAwesomeIcons.listAlt,
                       color: Theme.of(context).primaryColorDark,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ListScreen()),
+                      );
+                    },
                   ),
-                  
                 ],
               ),
               Row(
@@ -162,7 +173,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                       _scaleFactor+=10; 
+                        _scaleFactor += 10;
                       });
                     },
                   ),
@@ -173,7 +184,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                       _scaleFactor-=10; 
+                        _scaleFactor -= 10;
                       });
                     },
                   )
@@ -184,5 +195,69 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  void _settingModalBottomSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            //color: Theme.of(context).scaffoldBackgroundColor,
+            child: new Wrap(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 16.0, right: 16.0, top: 8.0, bottom: 0.0),
+                  child: Text(
+                    "Selecciona proveedor",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Divider(),
+                RadioListTile(
+                  dense: true,
+                  value: 0,
+                  groupValue: _radioProvider,
+                  onChanged: (val) {
+                    setState(() {
+                      _radioProvider = val;
+                      _provider = CiudadRedondaProvider();
+                      _updateTextsSet();
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  title: new Text('CiudadRedonda.org'),
+                ),
+                RadioListTile(
+                  dense: true,
+                  value: 1,
+                  groupValue: _radioProvider,
+                  onChanged: (val) {
+                    setState(() {
+                      _radioProvider = val;
+                      _provider = BuigleProvider();
+                      _updateTextsSet();
+                      Navigator.of(context).pop();
+                    });
+                  },
+                  title: new Text('Buigle.net'),
+                ),
+                Container(
+                  height: 50,
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  void _updateTextsSet() {
+    _selectedTextsSet = null;
+    _provider.get(_selectedDate).then((texts) {
+      setState(() {
+        this._selectedTextsSet = texts;
+      });
+    });
   }
 }
