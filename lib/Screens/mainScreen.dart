@@ -1,6 +1,6 @@
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/BuigleProvider.dart';
-import 'package:evangelios/Parsers/CiudadRedondaParser.dart';
+import 'package:evangelios/Parsers/CiudadRedondaProvider.dart';
 import 'package:evangelios/Widgets/GodspellWidget.dart';
 import 'package:evangelios/Widgets/LectureWidget.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   final int SETTINGS_ID = 0x01;
   final int DIARY_ID = 0x02;
 
-  Provider _provider = BuigleProvider();
+  Provider _provider = Provider.getInstance("Buigle");
 
   void initState() {
     super.initState();

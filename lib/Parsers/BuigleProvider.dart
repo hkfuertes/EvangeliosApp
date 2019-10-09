@@ -8,10 +8,16 @@ import 'package:html/dom.dart';
 import 'Provider.dart';
 
 class BuigleProvider extends Provider {
-  RegExp firstRegex = new RegExp(r'PRIMERA LECTURA.*Palabra de Dios',multiLine: true, dotAll: true);
-  RegExp secondRegex = new RegExp(r"SEGUNDA LECTURA.*Palabra de Dios",multiLine: true, dotAll: true);
-  RegExp psalmRegex = new RegExp(r"SALMO RESPONSORIAL.*<br><br>",multiLine: true, dotAll: true);
-  RegExp godspellRegex = new RegExp(r"EVANGELIO.*Palabra del Señor",multiLine: true, dotAll: true);
+  RegExp firstRegex =
+      new RegExp(r'PRIMERA LECTURA.*SALMO', multiLine: true, dotAll: true);
+  RegExp secondRegex = new RegExp(r"SEGUNDA LECTURA.*Aleluya",
+      multiLine: true, dotAll: true);
+  RegExp psalmRegex =
+      new RegExp(r"SALMO RESPONSORIAL.*Aleluya", multiLine: true, dotAll: true);
+  RegExp psalmSundayRegex =
+      new RegExp(r"SALMO RESPONSORIAL.*SEGUNDA", multiLine: true, dotAll: true);
+  RegExp godspellRegex = new RegExp(r"EVANGELIO.*Palabra del Señor",
+      multiLine: true, dotAll: true);
 
   @override
   String getProviderNameForDisplay() {
@@ -26,7 +32,7 @@ class BuigleProvider extends Provider {
   }
 
   @override
-  TextsSet parse(String body)  {
+  TextsSet parse(String body) {
     var document = Parser.parse(body);
     String texts = document
         .querySelectorAll('table.texto2 tbody tr td div')[1]
@@ -35,14 +41,18 @@ class BuigleProvider extends Provider {
         .replaceAll("\n", "");
     var first = this.getFirst(texts);
     var firstIndex = this.getFirstIndex(texts);
-    var psalm = this.getPsalm(texts);
-    var psalmIndex = this.getPsalmIndex(texts);
-    var psalmResponse = this.getPsalmResponse(texts);
+
     var second = this.getSecond(texts);
     var secondIndex = this.getSecondIndex(texts);
+
+    var psalm = this.getPsalm(texts, second != null);
+    var psalmIndex = this.getPsalmIndex(texts);
+    var psalmResponse = this.getPsalmResponse(texts);
+
     var godspel = this.getGodspell(texts);
     var godspelIndex = this.getGodspellIndex(texts);
-    return TextsSet(null, first, firstIndex, second, secondIndex, psalm, psalmIndex, psalmResponse, godspel, godspelIndex);
+    return TextsSet(null, first, firstIndex, second, secondIndex, psalm,
+        psalmIndex, psalmResponse, godspel, godspelIndex);
   }
 
   String getGodspellIndex(String chunk) {
@@ -51,10 +61,7 @@ class BuigleProvider extends Provider {
 
   String getGodspell(String chunk) {
     var parts = this.godspellRegex.stringMatch(chunk).split("<br>");
-    return parts
-        .sublist(3, parts.length - 1)
-        .join("\n")
-        .trim();
+    return parts.sublist(3, parts.length - 1).join("\n").trim();
   }
 
   String getFirstIndex(String chunk) {
@@ -63,42 +70,49 @@ class BuigleProvider extends Provider {
 
   String getFirst(String chunk) {
     var parts = this.firstRegex.stringMatch(chunk).split("<br>");
-    return parts
-        .sublist(3, parts.length - 1)
-        .join("\n")
-        .trim();
+    return parts.sublist(3, parts.length - 3).join("\n").trim();
   }
 
   String getSecondIndex(String chunk) {
     var match = this.secondRegex.stringMatch(chunk);
-    if(match == null) return null;
+    if (match == null) return null;
     return match.split("<br>")[2];
   }
 
   String getSecond(String chunk) {
     var match = this.secondRegex.stringMatch(chunk);
-    if(match == null) return null;
+    if (match == null) return null;
 
     var parts = match.split("<br>");
-    return parts
-        .sublist(3, parts.length - 1)
-        .join("\n")
-        .trim();
+    return parts.sublist(3, parts.length - 4).join("\n").trim();
   }
 
-  String getPsalm(String chunk) {
-    var parts = this.psalmRegex.stringMatch(chunk).split("<br>");
+  String getPsalm(String chunk, bool sunday) {
+    var parts = !sunday
+        ? this.psalmRegex.stringMatch(chunk).split("<br>")
+        : this.psalmSundayRegex.stringMatch(chunk).split("<br>");
     return parts
-        .sublist(2)
+        .sublist(2, parts.length - 2)
         .join("\n")
+        .replaceAll(" R.", " R/.\n")
         .trim();
   }
 
   String getPsalmIndex(String chunk) {
-    return this.psalmRegex.stringMatch(chunk).split("<br>")[0].trim();
+    return this
+        .psalmRegex
+        .stringMatch(chunk)
+        .split("<br>")[0]
+        .trim()
+        .replaceAll("SALMO RESPONSORIAL", "Sal");
   }
 
   String getPsalmResponse(String chunk) {
-    return this.psalmRegex.stringMatch(chunk).split("<br>")[1].trim();
+    return this
+        .psalmRegex
+        .stringMatch(chunk)
+        .split("<br>")[1]
+        .trim()
+        .replaceAll("R.", "R/.");
   }
 }
