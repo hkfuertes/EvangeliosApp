@@ -1,8 +1,9 @@
+import 'package:intl/intl.dart';
+
 class Comment {
-  final RegExp title1 = RegExp('^#');
-  final RegExp title2 = RegExp('^##');
+  static final DateFormat dateFormatter = DateFormat("yyy.MM.dd");
   final DateTime date;
-  final String comment;
+  String comment;
 
   Comment(this.date, this.comment);
 
@@ -22,5 +23,13 @@ class Comment {
         .replaceAll("_", "")
         .replaceAll("# ", "")
         .replaceAll("## ", "");
+  }
+
+  Map<String, String> toMapForDb() {
+    return {'date':Comment.dateFormatter.format(date), 'comment': comment};
+  }
+
+  static Comment fromDb(Map<String, dynamic> first) {
+    return Comment(Comment.dateFormatter.parse(first['date']), first['comment']);
   }
 }

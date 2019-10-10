@@ -20,6 +20,7 @@ dependencies:
   intl:
   html:
   http:
+  sqflite:
   font_awesome_flutter:
   auto_size_text:
   flutter_markdown:

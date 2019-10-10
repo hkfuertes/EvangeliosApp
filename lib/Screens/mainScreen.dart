@@ -28,9 +28,6 @@ class _MainScreenState extends State<MainScreen> {
 
   double _scaleFactor = 120;
 
-  final int SETTINGS_ID = 0x01;
-  final int DIARY_ID = 0x02;
-
   Provider _provider = CiudadRedondaProvider();
 
   int _radioProvider = 0;

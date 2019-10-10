@@ -1,9 +1,9 @@
+import 'package:evangelios/Model/Comment.dart';
+import 'package:evangelios/Model/DBHelper.dart';
 import 'package:evangelios/Model/TextsSet.dart';
-import 'package:evangelios/Widgets/LoadingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EditScreen extends StatefulWidget {
   static final String PAGE_NAME = "EDIT_PAGE";
@@ -18,6 +18,8 @@ class EditScreen extends StatefulWidget {
 
 class _EditScreenState extends State<EditScreen> {
   TextsSet _selectedTextsSet;
+  Comment _comment;
+  DBHelper _dbHelper = DBHelper();
 
   _EditScreenState(this._selectedTextsSet);
 
@@ -25,6 +27,15 @@ class _EditScreenState extends State<EditScreen> {
 
   void initState() {
     super.initState();
+    _dbHelper.fetchComment(_selectedTextsSet.date).then((comment){
+      setState(() {
+        if(comment == null){
+          _comment = Comment(_selectedTextsSet.date,"");
+        }else
+          _comment = comment;
+       _appendText(_comment.comment); 
+      });
+    });
   }
 
   @override
@@ -43,7 +54,7 @@ class _EditScreenState extends State<EditScreen> {
     });
   }
 
-  Widget _buildMainLayout(BuildContext context, TextsSet textsSet) {
+  Widget _buildMainLayout(BuildContext context) {
     return Container(
         color: Colors.white,
         child: Padding(
@@ -133,11 +144,14 @@ class _EditScreenState extends State<EditScreen> {
           )
         ],
       ),
-      body: _selectedTextsSet != null
-          ? _buildMainLayout(context, _selectedTextsSet)
-          : LoadingWidget("cargando..."),
+      body: _buildMainLayout(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _comment.comment = _textFieldController.text;
+          _dbHelper.saveOrUpdateComment(_comment).then((added){
+            Navigator.of(context).pop();
+          });
+        },
         child: Icon(Icons.save),
       ),
     );
