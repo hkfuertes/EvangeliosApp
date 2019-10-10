@@ -15,14 +15,17 @@ import 'editScreen.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
-class MainScreen extends StatefulWidget {
-  static final String PAGE_NAME = "MAIN_PAGE";
+import 'package:shared_preferences/shared_preferences.dart';
 
+class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  static final String scaleFactorTag = "SCALE_FACTOR";
+  static final String selectedProviderTag = "SELECTED_PROVIDER";
+
   DateTime _selectedDate = DateTime.now();
   TextsSet _selectedTextsSet;
 
@@ -34,11 +37,35 @@ class _MainScreenState extends State<MainScreen> {
 
   void initState() {
     super.initState();
-    _provider.get(_selectedDate).then((texts) {
+    SharedPreferences.getInstance().then((sp) {
       setState(() {
-        _selectedTextsSet = texts;
+        _scaleFactor = sp.getDouble(scaleFactorTag) ?? 120;
+        _radioProvider = sp.getInt(selectedProviderTag) ?? 1;
+        _provider = _createProvider(_radioProvider);
+      });
+      _provider.get(_selectedDate).then((texts) {
+        setState(() {
+          _selectedTextsSet = texts;
+        });
       });
     });
+  }
+
+  Provider _createProvider(int choice) {
+    switch (choice) {
+      case Providers.CiudadRedonda:
+        return CiudadRedondaProvider();
+      case Providers.Buigle:
+        return BuigleProvider();
+      default:
+        return CiudadRedondaProvider();
+    }
+  }
+
+  Future savevalues() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setDouble(scaleFactorTag, _scaleFactor);
+    sp.setInt(selectedProviderTag, _radioProvider);
   }
 
   //https://stackoverflow.com/questions/51607440/horizontally-scrollable-cards-with-snap-effect-in-flutter
@@ -48,10 +75,13 @@ class _MainScreenState extends State<MainScreen> {
     TextStyle copyRightStyle = TextStyle(fontSize: 10, color: Colors.grey);
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(top:8.0, left:16.0, right: 16.0, bottom: 16.0),
+        padding: const EdgeInsets.only(
+            top: 8.0, left: 16.0, right: 16.0, bottom: 16.0),
         child: Column(children: <Widget>[
           ScriptWidget(
-            textsSet.first, textsSet.firstIndex, "Palabra de Dios",
+            textsSet.first,
+            textsSet.firstIndex,
+            "Palabra de Dios",
             zoomFactor: _scaleFactor,
           ),
           Divider(),
@@ -60,12 +90,14 @@ class _MainScreenState extends State<MainScreen> {
               zoomFactor: _scaleFactor),
           Divider(),
           (textsSet.second != null)
-              ? ScriptWidget(textsSet.second, textsSet.secondIndex, "Palabra de Dios",
+              ? ScriptWidget(
+                  textsSet.second, textsSet.secondIndex, "Palabra de Dios",
                   zoomFactor: _scaleFactor)
               : Container(),
           (textsSet.second != null) ? Divider() : Container(),
-          ScriptWidget(textsSet.godspel, textsSet.godspelIndex, "Palabra del Señor",
-           zoomFactor: _scaleFactor),
+          ScriptWidget(
+              textsSet.godspel, textsSet.godspelIndex, "Palabra del Señor",
+              zoomFactor: _scaleFactor),
           Container(
             height: spaceForCopyRight,
           ),
@@ -190,6 +222,7 @@ class _MainScreenState extends State<MainScreen> {
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
+                      savevalues().then((_){});
                       setState(() {
                         _scaleFactor += 10;
                       });
@@ -201,6 +234,7 @@ class _MainScreenState extends State<MainScreen> {
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
+                      savevalues().then((_){});
                       setState(() {
                         _scaleFactor -= 10;
                       });
@@ -235,14 +269,14 @@ class _MainScreenState extends State<MainScreen> {
                 Divider(),
                 RadioListTile(
                   dense: true,
-                  value: 0,
+                  value: Providers.CiudadRedonda,
                   groupValue: _radioProvider,
                   onChanged: (val) {
                     setState(() {
                       _radioProvider = val;
                       _provider = CiudadRedondaProvider();
                       _updateTextsSet();
-                      Navigator.of(context).pop();
+                      savevalues().then(Navigator.of(context).pop);
                     });
                   },
                   title: new Text('Ciudad Redonda'),
@@ -250,14 +284,14 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 RadioListTile(
                   dense: true,
-                  value: 1,
+                  value: Providers.Buigle,
                   groupValue: _radioProvider,
                   onChanged: (val) {
                     setState(() {
                       _radioProvider = val;
                       _provider = BuigleProvider();
                       _updateTextsSet();
-                      Navigator.of(context).pop();
+                      savevalues().then(Navigator.of(context).pop);
                     });
                   },
                   title: Text('Buigle'),
