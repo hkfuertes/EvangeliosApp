@@ -42,7 +42,7 @@ dev_dependencies:
 
 flutter_icons:
     android: true
-    ios: false
+    ios: true
     image_path_android: assets/bible_icon.png
     image_path_ios: assets/bible_icon.png
     adaptive_icon_background: assets/bible_icon_bg.png
