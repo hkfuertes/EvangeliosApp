@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-class ScriptWidget extends StatelessWidget {
-  final String text, textIndex;
-  final String endPhrase;
+class PsalmWidget extends StatelessWidget {
+  final String psalm, psalmResponse, psalmIndex;
   final double zoomFactor;
-  ScriptWidget(this.text, this.textIndex, this.endPhrase,
+  PsalmWidget(this.psalm, this.psalmResponse, this.psalmIndex,
       {this.zoomFactor = 100});
 
   @override
@@ -16,7 +15,7 @@ class ScriptWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            textIndex,
+            psalmIndex,
             style: Theme.of(context)
                 .textTheme
                 .title
@@ -25,18 +24,18 @@ class ScriptWidget extends StatelessWidget {
           Container(
             height: 10,
           ),
-          Text(text,
-              style: Theme.of(context)
-                  .textTheme
-                  .body1
-                  .copyWith(fontSize: defaultSizeNormal * (zoomFactor / 100))),
+          Text(psalmResponse,
+              style: Theme.of(context).textTheme.body1.copyWith(
+                  fontSize: defaultSizeNormal * (zoomFactor / 100),
+                  fontWeight: FontWeight.bold)),
           Container(
             height: 10,
           ),
-          Text(endPhrase,
-              style: Theme.of(context).textTheme.body1.copyWith(
-                  fontSize: defaultSizeNormal * (zoomFactor / 100),
-                  fontWeight: FontWeight.bold))
+          Text(psalm,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .copyWith(fontSize: defaultSizeNormal * (zoomFactor / 100)))
         ]);
   }
 }

@@ -61,7 +61,10 @@ class BuigleProvider extends Provider {
 
   String getGodspell(String chunk) {
     var parts = this.godspellRegex.stringMatch(chunk).split("<br>");
-    return parts.sublist(3, parts.length - 1).join("\n").trim();
+    return parts.sublist(3, parts.length - 1).join("\n")
+    .replaceAll(String.fromCharCode(0x93), "")
+    .replaceAll(String.fromCharCode(0x94), "")
+    .trim();
   }
 
   String getFirstIndex(String chunk) {

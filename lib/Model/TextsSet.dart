@@ -22,7 +22,7 @@ class TextsSet {
   }
 
   String getFirstMarkDown(){
-    return "## "+firstIndex+"\n\n"+first + "\n\n**Palabra de Dios**";
+    return "## "+firstIndex+"\n"+first +"\n\n**Palabra de Dios**";
   }
 
   String getSecondMarkDown(){

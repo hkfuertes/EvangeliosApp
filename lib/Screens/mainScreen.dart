@@ -3,6 +3,7 @@ import 'package:evangelios/Parsers/BuigleProvider.dart';
 import 'package:evangelios/Parsers/CiudadRedondaProvider.dart';
 import 'package:evangelios/Screens/listScreen.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
+import 'package:evangelios/Widgets/PsalmWidget.dart';
 import 'package:evangelios/Widgets/ScriptWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,21 +51,24 @@ class _MainScreenState extends State<MainScreen> {
     TextStyle copyRightStyle = TextStyle(fontSize: 10, color: Colors.grey);
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top:8.0, left:16.0, right: 16.0, bottom: 16.0),
         child: Column(children: <Widget>[
           ScriptWidget(
-            textsSet.getFirstMarkDown(),
+            textsSet.first, textsSet.firstIndex, "Palabra de Dios",
             zoomFactor: _scaleFactor,
           ),
           Divider(),
-          ScriptWidget(textsSet.getPsalmMarkDown(), zoomFactor: _scaleFactor),
+          PsalmWidget(
+              textsSet.psalm, textsSet.psalmResponse, textsSet.psalmIndex,
+              zoomFactor: _scaleFactor),
           Divider(),
           (textsSet.second != null)
-              ? ScriptWidget(textsSet.getSecondMarkDown(),
+              ? ScriptWidget(textsSet.second, textsSet.secondIndex, "Palabra de Dios",
                   zoomFactor: _scaleFactor)
               : Container(),
           (textsSet.second != null) ? Divider() : Container(),
-          ScriptWidget(textsSet.getGodspelMarkDown(), zoomFactor: _scaleFactor),
+          ScriptWidget(textsSet.godspel, textsSet.godspelIndex, "Palabra del Señor",
+           zoomFactor: _scaleFactor),
           Container(
             height: spaceForCopyRight,
           ),
@@ -118,10 +122,9 @@ class _MainScreenState extends State<MainScreen> {
                       Util.getFullDateSpanish(_selectedDate),
                       maxLines: 1,
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24
-                      ),
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
                     ),
                   ),
                   Icon(
