@@ -22,9 +22,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  static final String scaleFactorTag = "SCALE_FACTOR";
-  static final String selectedProviderTag = "SELECTED_PROVIDER";
-
   DateTime _selectedDate = DateTime.now();
   TextsSet _selectedTextsSet;
 
@@ -39,13 +36,13 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    _settingsHelper.getValue(scaleFactorTag).then((value) {
+    _settingsHelper.getValue(Tags.scaleFactorTag).then((value) {
       setState(() {
         _scaleFactor = value == null ? 120 : double.parse(value);
       });
     });
 
-    _settingsHelper.getValue(selectedProviderTag).then((value) {
+    _settingsHelper.getValue(Tags.selectedProviderTag).then((value) {
       setState(() {
         _radioProvider = value == null ? Providers.CiudadRedonda : int.parse(value);
         _provider = _createProvider(_radioProvider);
@@ -71,8 +68,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future savevalues() async {
-    await _settingsHelper.setValue(scaleFactorTag, _scaleFactor);
-    await _settingsHelper.setValue(selectedProviderTag, _radioProvider);
+    await _settingsHelper.setValue(Tags.scaleFactorTag, _scaleFactor);
+    await _settingsHelper.setValue(Tags.selectedProviderTag, _radioProvider);
   }
 
   //https://stackoverflow.com/questions/51607440/horizontally-scrollable-cards-with-snap-effect-in-flutter

@@ -34,3 +34,8 @@ class Util{
       return getDayOfWeekSpanish(date) + " "+ date.day.toString() + " de " + getMonthSpanish(date);
     }
 }
+
+class Tags{
+  static final String scaleFactorTag = "SCALE_FACTOR";
+  static final String selectedProviderTag = "SELECTED_PROVIDER";
+}

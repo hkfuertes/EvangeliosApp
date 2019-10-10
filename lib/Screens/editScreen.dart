@@ -1,9 +1,12 @@
 import 'package:evangelios/Model/Comment.dart';
 import 'package:evangelios/Model/DBHelper.dart';
+import 'package:evangelios/Model/SettingsHelper.dart';
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+
+import '../Util.dart';
 
 class EditScreen extends StatefulWidget {
   static final String PAGE_NAME = "EDIT_PAGE";
@@ -20,6 +23,9 @@ class _EditScreenState extends State<EditScreen> {
   TextsSet _selectedTextsSet;
   Comment _comment;
   DBHelper _dbHelper = DBHelper();
+  SettingsHelper _settingsHelper = SettingsHelper();
+
+  double _scaleFactor = 120;
 
   _EditScreenState(this._selectedTextsSet);
 
@@ -27,13 +33,18 @@ class _EditScreenState extends State<EditScreen> {
 
   void initState() {
     super.initState();
-    _dbHelper.fetchComment(_selectedTextsSet.date).then((comment){
+    _settingsHelper.getValue(Tags.scaleFactorTag).then((value) {
       setState(() {
-        if(comment == null){
-          _comment = Comment(_selectedTextsSet.date,"");
-        }else
+        _scaleFactor = value == null ? 120 : double.parse(value);
+      });
+    });
+    _dbHelper.fetchComment(_selectedTextsSet.date).then((comment) {
+      setState(() {
+        if (comment == null) {
+          _comment = Comment(_selectedTextsSet.date, "");
+        } else
           _comment = comment;
-       _appendText(_comment.comment); 
+        _appendText(_comment.comment);
       });
     });
   }
@@ -60,6 +71,9 @@ class _EditScreenState extends State<EditScreen> {
         child: Padding(
           padding: EdgeInsets.all(8.0),
           child: TextField(
+            style: Theme.of(context).textTheme.body1.copyWith(
+                fontSize:
+                    Theme.of(context).textTheme.body1.fontSize * (_scaleFactor / 100)),
             controller: this._textFieldController,
             maxLines: 99,
             decoration: InputDecoration(
@@ -148,7 +162,7 @@ class _EditScreenState extends State<EditScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _comment.comment = _textFieldController.text;
-          _dbHelper.saveOrUpdateComment(_comment).then((added){
+          _dbHelper.saveOrUpdateComment(_comment).then((added) {
             Navigator.of(context).pop();
           });
         },
