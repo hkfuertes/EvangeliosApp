@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
   TextsSet _selectedTextsSet;
 
-  double _scaleFactor=120;
+  double _scaleFactor = 120;
 
   Provider _provider = CiudadRedondaProvider();
 
