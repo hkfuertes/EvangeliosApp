@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:evangelios/Model/Comment.dart';
 import 'package:evangelios/Model/DBHelper.dart';
+import 'package:evangelios/Util.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,8 +51,8 @@ class _ListScreenState extends State<ListScreen> {
                     Icons.delete,
                     color: Theme.of(context).primaryColorDark,
                   ),
-                  onPressed: (){
-                    _dbHelper.removeComment(el.date).then((_){
+                  onPressed: () {
+                    _dbHelper.removeComment(el.date).then((_) {
                       setState(() {
                         _comments.remove(el);
                       });
@@ -103,33 +104,57 @@ class _ListScreenState extends State<ListScreen> {
         isScrollControlled: true,
         context: context,
         builder: (BuildContext bc) {
-          return Column(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).padding.top,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: MarkdownBody(
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).padding.top,
+                ),
+                Row(
+                  children: <Widget>[
+                    AutoSizeText(
+                      Util.getFullDateSpanish(comment.date),
+                      maxLines: 1,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ),
+                  ],
+                ),
+                Container(height: 32,),
+                MarkdownBody(
                   data: comment.comment,
                 ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              FlatButton(
-                child: Text(
-                  "Cerrar",
-                  style: TextStyle(color: Theme.of(context).primaryColorDark),
+                Expanded(
+                  child: Container(),
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              Container(
-                height: 10,
-              )
-            ],
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FlatButton(
+                        child: Text(
+                          "Cerrar",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColorDark),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.share,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         });
   }
