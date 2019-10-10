@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 
 class ListScreen extends StatefulWidget {
   static final String PAGE_NAME = "LIST_PAGE";
@@ -149,7 +150,9 @@ class _ListScreenState extends State<ListScreen> {
                       icon: Icon(
                         Icons.share,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Share.share(comment.getStrippedComment());
+                      },
                     ),
                   ],
                 ),

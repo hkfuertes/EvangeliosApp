@@ -1,3 +1,4 @@
+import 'package:evangelios/Model/SettingsHelper.dart';
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/BuigleProvider.dart';
 import 'package:evangelios/Parsers/CiudadRedondaProvider.dart';
@@ -15,8 +16,6 @@ import 'editScreen.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -29,24 +28,33 @@ class _MainScreenState extends State<MainScreen> {
   DateTime _selectedDate = DateTime.now();
   TextsSet _selectedTextsSet;
 
-  double _scaleFactor = 120;
+  double _scaleFactor=120;
 
   Provider _provider = CiudadRedondaProvider();
 
-  int _radioProvider = 0;
+  SettingsHelper _settingsHelper = SettingsHelper();
+
+  int _radioProvider = Providers.CiudadRedonda;
 
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((sp) {
+
+    _settingsHelper.getValue(scaleFactorTag).then((value) {
       setState(() {
-        _scaleFactor = sp.getDouble(scaleFactorTag) ?? 120;
-        _radioProvider = sp.getInt(selectedProviderTag) ?? 1;
+        _scaleFactor = value == null ? 120 : double.parse(value);
+      });
+    });
+
+    _settingsHelper.getValue(selectedProviderTag).then((value) {
+      setState(() {
+        _radioProvider = value == null ? Providers.CiudadRedonda : int.parse(value);
         _provider = _createProvider(_radioProvider);
       });
-      _provider.get(_selectedDate).then((texts) {
-        setState(() {
-          _selectedTextsSet = texts;
-        });
+    });
+
+    _provider.get(_selectedDate).then((texts) {
+      setState(() {
+        _selectedTextsSet = texts;
       });
     });
   }
@@ -63,9 +71,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future savevalues() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setDouble(scaleFactorTag, _scaleFactor);
-    sp.setInt(selectedProviderTag, _radioProvider);
+    await _settingsHelper.setValue(scaleFactorTag, _scaleFactor);
+    await _settingsHelper.setValue(selectedProviderTag, _radioProvider);
   }
 
   //https://stackoverflow.com/questions/51607440/horizontally-scrollable-cards-with-snap-effect-in-flutter
@@ -222,7 +229,7 @@ class _MainScreenState extends State<MainScreen> {
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
-                      savevalues().then((_){});
+                      savevalues().then((_) {});
                       setState(() {
                         _scaleFactor += 10;
                       });
@@ -234,7 +241,7 @@ class _MainScreenState extends State<MainScreen> {
                       color: Theme.of(context).primaryColorDark,
                     ),
                     onPressed: () {
-                      savevalues().then((_){});
+                      savevalues().then((_) {});
                       setState(() {
                         _scaleFactor -= 10;
                       });

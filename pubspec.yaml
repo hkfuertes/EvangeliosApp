@@ -21,7 +21,7 @@ dependencies:
   html:
   http:
   sqflite:
-  shared_preferences:
+  share:
   font_awesome_flutter:
   auto_size_text:
   flutter_markdown:
