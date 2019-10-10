@@ -10,9 +10,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Evangelio',
+      title: 'Lecturas',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        //brightness: Brightness.dark,
         primarySwatch: Colors.brown,
       ),
       localizationsDelegates: [

@@ -21,6 +21,7 @@ dependencies:
   html:
   http:
   font_awesome_flutter:
+  auto_size_text:
   flutter_markdown:
   flutter:
     sdk: flutter

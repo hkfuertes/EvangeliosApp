@@ -12,6 +12,8 @@ import '../Parsers/Provider.dart';
 import '../Util.dart';
 import 'editScreen.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
+
 class MainScreen extends StatefulWidget {
   static final String PAGE_NAME = "MAIN_PAGE";
 
@@ -98,23 +100,39 @@ class _MainScreenState extends State<MainScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: FlatButton(
-          onPressed: () {
-            _selectDate(context).then(_provider.get).then((texts) {
-              setState(() {
-                _selectedDate = texts.date;
-                _selectedTextsSet = texts;
-              });
-            });
-          },
-          child: Text(
-            Util.getFullDateSpanish(_selectedDate),
-            style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 24),
+        title: Row(children: <Widget>[
+          Expanded(
+            child: FlatButton(
+              onPressed: () {
+                _selectDate(context).then(_provider.get).then((texts) {
+                  setState(() {
+                    _selectedDate = texts.date;
+                    _selectedTextsSet = texts;
+                  });
+                });
+              },
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: AutoSizeText(
+                      Util.getFullDateSpanish(_selectedDate),
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    color: Theme.of(context).primaryColorDark,
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
+        ]),
       ),
       body: _selectedTextsSet != null
           ? _buildMainLayout(context, _selectedTextsSet)
@@ -227,7 +245,8 @@ class _MainScreenState extends State<MainScreen> {
                       Navigator.of(context).pop();
                     });
                   },
-                  title: new Text('CiudadRedonda.org'),
+                  title: new Text('Ciudad Redonda'),
+                  subtitle: Text('www.ciudadredonda.org'),
                 ),
                 RadioListTile(
                   dense: true,
@@ -241,7 +260,8 @@ class _MainScreenState extends State<MainScreen> {
                       Navigator.of(context).pop();
                     });
                   },
-                  title: new Text('Buigle.net'),
+                  title: Text('Buigle'),
+                  subtitle: Text('www.buigle.net'),
                 ),
                 Container(
                   height: 50,
