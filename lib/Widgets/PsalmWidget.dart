@@ -14,7 +14,7 @@ class PsalmWidget extends StatelessWidget {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          SelectableText(
             psalmIndex,
             style: Theme.of(context)
                 .textTheme
@@ -24,14 +24,14 @@ class PsalmWidget extends StatelessWidget {
           Container(
             height: 10,
           ),
-          Text(psalmResponse,
+          SelectableText(psalmResponse,
               style: Theme.of(context).textTheme.body1.copyWith(
                   fontSize: defaultSizeNormal * (zoomFactor / 100),
                   fontWeight: FontWeight.bold)),
           Container(
             height: 10,
           ),
-          Text(psalm,
+          SelectableText(psalm,
               style: Theme.of(context)
                   .textTheme
                   .body1

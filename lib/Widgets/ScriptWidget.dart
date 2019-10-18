@@ -15,7 +15,7 @@ class ScriptWidget extends StatelessWidget {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          SelectableText(
             textIndex,
             style: Theme.of(context)
                 .textTheme
@@ -25,7 +25,7 @@ class ScriptWidget extends StatelessWidget {
           Container(
             height: 10,
           ),
-          Text(text,
+          SelectableText(text,
               style: Theme.of(context)
                   .textTheme
                   .body1
@@ -33,7 +33,7 @@ class ScriptWidget extends StatelessWidget {
           Container(
             height: 10,
           ),
-          Text(endPhrase,
+          SelectableText(endPhrase,
               style: Theme.of(context).textTheme.body1.copyWith(
                   fontSize: defaultSizeNormal * (zoomFactor / 100),
                   fontWeight: FontWeight.bold))
