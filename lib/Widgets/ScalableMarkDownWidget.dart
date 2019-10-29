@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-class ScriptWidget extends StatelessWidget {
-  ScriptWidget(this.text, {this.zoomFactor = 100});
+class ScalableMarkDownWidget extends StatelessWidget {
+  ScalableMarkDownWidget(this.text, {this.zoomFactor = 100});
   final String text;
   final double zoomFactor;
 

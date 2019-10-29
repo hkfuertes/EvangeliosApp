@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:evangelios/Model/Comment.dart';
 import 'package:evangelios/Model/DBHelper.dart';
+import 'package:evangelios/Model/SettingsHelper.dart';
 import 'package:evangelios/Util.dart';
 import 'package:evangelios/Widgets/LoadingWidget.dart';
+import 'package:evangelios/Widgets/ScalableMarkDownWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -21,10 +23,19 @@ class _ListScreenState extends State<ListScreen> {
 
   DBHelper _dbHelper = DBHelper();
 
+  double _scaleFactor = 100;
+
+  SettingsHelper _settingsHelper = SettingsHelper();
+
   _ListScreenState();
 
   void initState() {
     super.initState();
+    _settingsHelper.getValue(Tags.scaleFactorTag).then((value) {
+      setState(() {
+        _scaleFactor = value == null ? 120 : double.parse(value);
+      });
+    });
     _dbHelper.fetchAllComments().then((comments) {
       setState(() {
         _comments = comments;
@@ -126,8 +137,9 @@ class _ListScreenState extends State<ListScreen> {
                   ],
                 ),
                 Container(height: 32,),
-                MarkdownBody(
-                  data: comment.comment,
+                ScalableMarkDownWidget(
+                  comment.comment,
+                  zoomFactor: _scaleFactor,
                 ),
                 Expanded(
                   child: Container(),

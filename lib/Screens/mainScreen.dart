@@ -1,3 +1,4 @@
+import 'package:evangelios/Model/Comment.dart';
 import 'package:evangelios/Model/SettingsHelper.dart';
 import 'package:evangelios/Model/TextsSet.dart';
 import 'package:evangelios/Parsers/BuigleProvider.dart';
@@ -44,16 +45,58 @@ class _MainScreenState extends State<MainScreen> {
 
     _settingsHelper.getValue(Tags.selectedProviderTag).then((value) {
       setState(() {
-        _radioProvider = value == null ? Providers.CiudadRedonda : int.parse(value);
+        _radioProvider =
+            value == null ? Providers.CiudadRedonda : int.parse(value);
         _provider = _createProvider(_radioProvider);
       });
     });
 
-    _provider.get(_selectedDate).then((texts) {
+    _retrieveTexts(_provider,_selectedDate).then((texts) {
       setState(() {
         _selectedTextsSet = texts;
       });
     });
+  }
+
+  Future<TextsSet> _retrieveTexts(Provider provider, DateTime date) async {
+    var savedDate = await _settingsHelper.getValue(Tags.LAST_UPDATED_TAG);
+    var savedProvider = await _settingsHelper.getValue(Tags.TEXTS_PROVIDER_TAG);
+    if (
+      savedDate != null && Comment.dateFormatter.parse(savedDate).difference(date).inDays ==0
+      && savedProvider == provider.getProviderNameForDisplay()
+      ) {
+      return TextsSet(
+        Comment.dateFormatter.parse(savedDate),
+        await _settingsHelper.getValue(Tags.FIRST_TAG),
+        await _settingsHelper.getValue(Tags.FIRST_INDEX_TAG),
+        await _settingsHelper.getValue(Tags.SECOND_TAG),
+        await _settingsHelper.getValue(Tags.SECOND_INDEX_TAG),
+        await _settingsHelper.getValue(Tags.PSALM_INDEX_TAG),
+        await _settingsHelper.getValue(Tags.PSALM_RESPONSE_TAG),
+        await _settingsHelper.getValue(Tags.PSALM_TAG),
+        await _settingsHelper.getValue(Tags.GODSPELL_TAG),
+        await _settingsHelper.getValue(Tags.GODSPELL_INDEX_TAG),
+      );
+    } else {
+      var texts = await provider.get(date);
+
+      if(date.difference(DateTime.now()).inDays == 0){
+        await _settingsHelper.setValue(Tags.LAST_UPDATED_TAG, Comment.dateFormatter.format(DateTime.now()));
+        await _settingsHelper.setValue(Tags.FIRST_TAG, texts.first);
+        await _settingsHelper.setValue(Tags.FIRST_INDEX_TAG, texts.firstIndex);
+        await _settingsHelper.setValue(Tags.SECOND_TAG, texts.second);
+        await _settingsHelper.setValue(Tags.SECOND_INDEX_TAG, texts.secondIndex);
+        await _settingsHelper.setValue(Tags.PSALM_INDEX_TAG, texts.psalmIndex);
+        await _settingsHelper.setValue(Tags.PSALM_RESPONSE_TAG, texts.psalmResponse);
+        await _settingsHelper.setValue(Tags.PSALM_TAG, texts.psalm);
+        await _settingsHelper.setValue(Tags.GODSPELL_INDEX_TAG, texts.godspelIndex);
+        await _settingsHelper.setValue(Tags.GODSPELL_TAG, texts.godspel);
+
+        await _settingsHelper.setValue(Tags.TEXTS_PROVIDER_TAG, provider.getProviderNameForDisplay());
+      }
+
+      return texts;
+    }
   }
 
   Provider _createProvider(int choice) {

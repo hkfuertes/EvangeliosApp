@@ -36,6 +36,22 @@ class Util{
 }
 
 class Tags{
-  static final String scaleFactorTag = "SCALE_FACTOR";
-  static final String selectedProviderTag = "SELECTED_PROVIDER";
+  static const scaleFactorTag = "SCALE_FACTOR";
+  static const selectedProviderTag = "SELECTED_PROVIDER";
+
+  static const LAST_UPDATED_TAG = "LAST_UPDATED_TAG";
+  static const TEXTS_PROVIDER_TAG = "TEXTS_PROVIDER_TAG";
+
+  static const FIRST_INDEX_TAG = "FIRST_INDEX_TAG";
+  static const FIRST_TAG = "FIRST_TAG";
+
+  static const SECOND_INDEX_TAG ="SECOND_INDEX_TAG";
+  static const SECOND_TAG = "SECOND_TAG";
+
+  static const PSALM_INDEX_TAG = "PSALM_INDEX_TAG";
+  static const PSALM_RESPONSE_TAG = "PSALM_RESPONSE_TAG";
+  static const PSALM_TAG = "PSALM_TAG";
+
+  static const GODSPELL_INDEX_TAG = "GODSPELL_INDEX_TAG";
+  static const GODSPELL_TAG = "GODSPELL_TAG";
 }

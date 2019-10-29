@@ -44,7 +44,7 @@ class _EditScreenState extends State<EditScreen> {
           _comment = Comment(_selectedTextsSet.date, "");
         } else
           _comment = comment;
-        _appendText(_comment.comment);
+        _textFieldController.text = comment.comment;
       });
     });
   }
@@ -58,9 +58,11 @@ class _EditScreenState extends State<EditScreen> {
 
   void _appendText(String tag) {
     setState(() {
-      _textFieldController.text += tag;
-      _textFieldController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _textFieldController.text.length));
+      var position = _textFieldController.selection.start;
+      var currentText = _textFieldController.text;
+      var firstPart = (currentText.substring(0,position) + tag);
+      _textFieldController.text = firstPart + currentText.substring(position,currentText.length);
+      _textFieldController.selection = TextSelection.fromPosition(TextPosition(offset: firstPart.length));
       setState(() {});
     });
   }
@@ -72,8 +74,8 @@ class _EditScreenState extends State<EditScreen> {
           padding: EdgeInsets.all(8.0),
           child: TextField(
             style: Theme.of(context).textTheme.body1.copyWith(
-                fontSize:
-                    Theme.of(context).textTheme.body1.fontSize * (_scaleFactor / 100)),
+                fontSize: Theme.of(context).textTheme.body1.fontSize *
+                    (_scaleFactor / 100)),
             controller: this._textFieldController,
             maxLines: 99,
             decoration: InputDecoration(
@@ -155,19 +157,29 @@ class _EditScreenState extends State<EditScreen> {
             onPressed: () {
               _appendText("_");
             },
-          )
+          ),
+          Opacity(
+            opacity: 0.5,
+            child: Container(
+              width: 1,
+              color: Colors.brown,
+            ),
+          ),
+          Container(
+            color: Colors.brown,
+            child: IconButton(
+              onPressed: () {
+                _comment.comment = _textFieldController.text;
+                _dbHelper.saveOrUpdateComment(_comment).then((added) {
+                  Navigator.of(context).pop();
+                });
+              },
+              icon: Icon(Icons.save, color: Colors.white,),
+            ),
+          ),
         ],
       ),
       body: _buildMainLayout(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _comment.comment = _textFieldController.text;
-          _dbHelper.saveOrUpdateComment(_comment).then((added) {
-            Navigator.of(context).pop();
-          });
-        },
-        child: Icon(Icons.save),
-      ),
     );
   }
 }
