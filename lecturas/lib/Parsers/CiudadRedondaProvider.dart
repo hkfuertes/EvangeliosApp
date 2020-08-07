@@ -100,10 +100,13 @@ class CiudadRedondaProvider extends TextsProvider {
   Future<String> getExtraUrl() async {
     String startingUrl =
         "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/comentario-homilia/hoy";
+    return startingUrl;
+    /*
     var response = await http.get(startingUrl);
     var document = Parser.parse(response.body);
     return "https://www.ciudadredonda.org" +
         document.querySelectorAll('div.print-icons a')[1].attributes["href"];
+    */
   }
 
   @override

@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 import '../Model/Settings.dart';
 import 'package:provider/provider.dart';
@@ -121,6 +119,7 @@ class MainScreen extends StatelessWidget {
                 return FloatingActionButton(
                   child: Icon(Icons.comment),
                   onPressed: () async {
+                    /*
                     if (Platform.isAndroid) {
                       AndroidIntent intent = AndroidIntent(
                         action: 'action_view',
@@ -129,10 +128,36 @@ class MainScreen extends StatelessWidget {
                       );
                       await intent.launch();
                     }
+                    */
+                    await _launchURL(context, snapshot.data);
                   },
                 );
               })
           : Container(),
     );
+  }
+
+  Future _launchURL(BuildContext context, String url) async {
+    try {
+      await launch(
+        url,
+        option: new CustomTabsOption(
+          toolbarColor: Theme.of(context).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+          animation: new CustomTabsAnimation.slideIn(),
+          extraCustomTabs: <String>[
+            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+            'org.mozilla.firefox',
+            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+            'com.microsoft.emmx',
+          ],
+        ),
+      );
+    } catch (e) {
+      // An exception is thrown if browser app is not installed on Android device.
+      debugPrint(e.toString());
+    }
   }
 }
