@@ -16,9 +16,12 @@ abstract class TextsProvider {
     texts.setDate(date);
     return texts;
   }
+
+  Future<String> getExtraUrl();
+  bool hasExtras(DateTime date);
 }
 
-class Providers {
+class TextsProviders {
   static const int CiudadRedonda = 0x01;
   static const int Buigle = 0x02;
 }

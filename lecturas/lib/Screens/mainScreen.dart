@@ -1,6 +1,9 @@
+import 'dart:io';
+
+import 'package:android_intent/android_intent.dart';
+
 import '../Model/Settings.dart';
 import 'package:provider/provider.dart';
-
 import '../Model/TextsSet.dart';
 
 import '../Widgets/LoadingWidget.dart';
@@ -8,11 +11,8 @@ import '../Widgets/PsalmWidget.dart';
 import '../Widgets/ScriptWidget.dart';
 import '../Widgets/LecturasDrawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../Util.dart';
-
-import 'package:auto_size_text/auto_size_text.dart';
 
 class MainScreen extends StatelessWidget {
   Settings _settings;
@@ -76,13 +76,15 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        //elevation: 0,
-        //backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           Util.getFullDateSpanish(_settings.currentTime),
           maxLines: 1,
           style: TextStyle(
-            //color: Theme.of(context).primaryColor,
+            color: (_settings.darkTheme)
+                ? Theme.of(context).textTheme.bodyText1.color
+                : Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
             //fontSize: 24
           ),
@@ -90,7 +92,7 @@ class MainScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.calendar_today, /*color: Colors.brown*/
+              Icons.calendar_today,
             ),
             onPressed: () async {
               _settings.currentTime = await _selectDate(context, _settings);
@@ -109,6 +111,28 @@ class MainScreen extends StatelessWidget {
         },
       ),
       drawer: LecturasDrawer(),
+      floatingActionButton: (_settings
+              .getProvider()
+              .hasExtras(_settings.currentTime))
+          ? FutureBuilder<String>(
+              future: _settings.getProvider().getExtraUrl(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (!snapshot.hasData) return Container();
+                return FloatingActionButton(
+                  child: Icon(Icons.comment),
+                  onPressed: () async {
+                    if (Platform.isAndroid) {
+                      AndroidIntent intent = AndroidIntent(
+                        action: 'action_view',
+                        data: snapshot.data,
+                        //type: "application/pdf"
+                      );
+                      await intent.launch();
+                    }
+                  },
+                );
+              })
+          : Container(),
     );
   }
 }

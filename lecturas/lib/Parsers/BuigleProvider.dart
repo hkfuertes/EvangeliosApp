@@ -48,8 +48,18 @@ class BuigleProvider extends TextsProvider {
 
     var godspel = this.getGodspell(texts);
     var godspelIndex = this.getGodspellIndex(texts);
-    return TextsSet(null, first, firstIndex, second, secondIndex, psalm,
-        psalmIndex, psalmResponse, godspel, godspelIndex);
+    return TextsSet(
+        null,
+        first,
+        firstIndex,
+        second,
+        secondIndex,
+        psalm,
+        psalmIndex,
+        psalmResponse,
+        godspel,
+        godspelIndex,
+        getProviderNameForDisplay());
   }
 
   String getGodspellIndex(String chunk) {
@@ -116,5 +126,15 @@ class BuigleProvider extends TextsProvider {
         .split("<br>")[1]
         .trim()
         .replaceAll("R.", "R/.");
+  }
+
+  @override
+  Future<String> getExtraUrl() async {
+    return null;
+  }
+
+  @override
+  bool hasExtras(DateTime date) {
+    return false;
   }
 }

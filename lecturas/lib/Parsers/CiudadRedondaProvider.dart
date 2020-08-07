@@ -4,6 +4,7 @@ import 'package:html/parser.dart' as Parser;
 import 'package:html/dom.dart';
 
 import 'TextsProvider.dart';
+import 'package:http/http.dart' as http;
 
 class CiudadRedondaProvider extends TextsProvider {
   @override
@@ -22,7 +23,8 @@ class CiudadRedondaProvider extends TextsProvider {
           getPsalmIndex(texts[1]),
           getPsalmResponse(texts[1]),
           getText(texts[3]),
-          getTextIndex(texts[3]));
+          getTextIndex(texts[3]),
+          getProviderNameForDisplay());
     } else {
       return TextsSet(
           null,
@@ -34,7 +36,8 @@ class CiudadRedondaProvider extends TextsProvider {
           getPsalmIndex(texts[1]),
           getPsalmResponse(texts[1]),
           getText(texts[2]),
-          getTextIndex(texts[2]));
+          getTextIndex(texts[2]),
+          getProviderNameForDisplay());
     }
   }
 
@@ -91,5 +94,21 @@ class CiudadRedondaProvider extends TextsProvider {
   @override
   String getProviderNameForDisplay() {
     return "www.ciudadredonda.org";
+  }
+
+  @override
+  Future<String> getExtraUrl() async {
+    String startingUrl =
+        "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/comentario-homilia/hoy";
+    var response = await http.get(startingUrl);
+    var document = Parser.parse(response.body);
+    return "https://www.ciudadredonda.org" +
+        document.querySelectorAll('div.print-icons a')[1].attributes["href"];
+  }
+
+  @override
+  bool hasExtras(DateTime date) {
+    return date.difference(DateTime.now()).inDays == 0 &&
+        date.day == DateTime.now().day;
   }
 }

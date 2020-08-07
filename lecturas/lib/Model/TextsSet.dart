@@ -6,6 +6,7 @@ class TextsSet {
   final String second, secondIndex;
   final String psalm, psalmIndex, psalmResponse;
   final String godspel, godspelIndex;
+  final String provider;
 
   TextsSet(
       this.date,
@@ -17,7 +18,8 @@ class TextsSet {
       this.psalmIndex,
       this.psalmResponse,
       this.godspel,
-      this.godspelIndex);
+      this.godspelIndex,
+      this.provider);
 
   void setDate(DateTime date) {
     this.date = date;
@@ -60,7 +62,8 @@ class TextsSet {
       "psalmIndex": this.psalmIndex,
       "psalmResponse": this.psalmResponse,
       "godspel": this.godspel,
-      "godspelIndex": this.godspelIndex
+      "godspelIndex": this.godspelIndex,
+      "provider": this.provider
     });
   }
 
@@ -76,6 +79,7 @@ class TextsSet {
         jsonData["psalmIndex"],
         jsonData["psalmResponse"],
         jsonData["godspel"],
-        jsonData["godspelIndex"]);
+        jsonData["godspelIndex"],
+        jsonData["provider"]);
   }
 }
