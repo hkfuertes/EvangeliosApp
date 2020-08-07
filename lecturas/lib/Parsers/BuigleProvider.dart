@@ -1,13 +1,10 @@
 import '../Model/TextsSet.dart';
 import 'package:intl/intl.dart';
-import '../Model/TextsSet.dart';
-import 'package:intl/intl.dart';
 import 'package:html/parser.dart' as Parser;
-import 'package:html/dom.dart';
 
-import 'Provider.dart';
+import 'TextsProvider.dart';
 
-class BuigleProvider extends Provider {
+class BuigleProvider extends TextsProvider {
   RegExp firstRegex =
       new RegExp(r'PRIMERA LECTURA.*SALMO', multiLine: true, dotAll: true);
   RegExp secondRegex =

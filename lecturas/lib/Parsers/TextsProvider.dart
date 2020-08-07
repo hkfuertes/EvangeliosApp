@@ -2,7 +2,7 @@ import '../Model/TextsSet.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
-abstract class Provider {
+abstract class TextsProvider {
   RegExp stripHtmlTagsRegex =
       RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
