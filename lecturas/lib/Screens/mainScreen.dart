@@ -1,4 +1,4 @@
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../Model/Settings.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +129,9 @@ class MainScreen extends StatelessWidget {
                       await intent.launch();
                     }
                     */
-                    await _launchURL(context, snapshot.data);
+                    //await _launchURL(context, snapshot.data);
+                    _commentBottomSheet(context, snapshot.data, _settings);
+                    print(snapshot.data);
                   },
                 );
               })
@@ -137,27 +139,42 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Future _launchURL(BuildContext context, String url) async {
-    try {
-      await launch(
-        url,
-        option: new CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-          animation: new CustomTabsAnimation.slideIn(),
-          extraCustomTabs: <String>[
-            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-            'org.mozilla.firefox',
-            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-            'com.microsoft.emmx',
-          ],
-        ),
-      );
-    } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
-      debugPrint(e.toString());
-    }
+  void _commentBottomSheet(context, String text, Settings _settings) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            //color: Theme.of(context).scaffoldBackgroundColor,
+            child: new ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: 16.0, right: 16.0, top: 8.0, bottom: 0.0),
+                  child: Text(
+                    "Comentario",
+                    //textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyText1.fontSize *
+                                _settings.scaleFactor),
+                  ),
+                ),
+                Divider(),
+                Html(
+                  padding: EdgeInsets.only(
+                      left: 16.0, right: 16.0, top: 8.0, bottom: 0.0),
+                  data: text,
+                  defaultTextStyle: TextStyle(
+                      fontSize: Theme.of(context).textTheme.bodyText1.fontSize *
+                          _settings.scaleFactor),
+                ),
+                Container(
+                  height: 50,
+                )
+              ],
+            ),
+          );
+        });
   }
 }

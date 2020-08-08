@@ -36,6 +36,7 @@ dependencies:
   shared_preferences:
   fluttertoast:
   #android_intent:
+  flutter_html:
   flutter_custom_tabs:
 
   # The following adds the Cupertino Icons font to your application.
