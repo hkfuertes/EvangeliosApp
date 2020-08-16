@@ -100,21 +100,28 @@ class CiudadRedondaProvider extends TextsProvider {
   Future<String> getExtraUrl() async {
     String startingUrl =
         "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/comentario-homilia/hoy";
+    //return startingUrl;
 
     var response = await http.get(startingUrl);
     var document = Parser.parse(response.body);
     var body = document.querySelectorAll('article div.body-txt')[0].outerHtml;
-
-/*    body = body.replaceAll(
+    body = body.replaceAll(RegExp(r'<p>\n<img.*></p>'), "");
+    body = body.replaceAll(RegExp(r'<p>\n&nbsp;</p>'), "");
+    body = body.replaceAll("&nbsp;", "");
+    body = body.replaceAll("<u>", "");
+    body = body.replaceAll("</u>", "");
+    body = body.replaceAll("§", "");
+/*
+    body = body.replaceAll(
         "<blockquote>", '<blockquote style="border-left: none;"');
   body = body.replaceAll("</blockquote>", '');
     body = _removeAllHtmlTags(body);
     //body = body.replaceAll("\n\n", "\n");
     body = body.trim();
-*/
+
 
     var blockquote =
-        "<style>blockquote *:before{content:''!important;}</style>";
+        "<style>blockquote *:before{content:''!important;}</style>";*/
     return body;
     //return "https://www.ciudadredonda.org" + document.querySelectorAll('div.print-icons a')[1].attributes["href"];
   }

@@ -1,4 +1,6 @@
-import 'package:flutter_html/flutter_html.dart';
+//import 'package:flutter_html/flutter_html.dart';
+import 'package:lecturas/Screens/commentScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Model/Settings.dart';
 import 'package:provider/provider.dart';
@@ -109,36 +111,31 @@ class MainScreen extends StatelessWidget {
         },
       ),
       drawer: LecturasDrawer(),
-      floatingActionButton: (_settings
-              .getProvider()
-              .hasExtras(_settings.currentTime))
-          ? FutureBuilder<String>(
-              future: _settings.getProvider().getExtraUrl(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData) return Container();
-                return FloatingActionButton(
+      floatingActionButton:
+          (_settings.getProvider().hasExtras(_settings.currentTime))
+              ? FloatingActionButton(
                   child: Icon(Icons.comment),
                   onPressed: () async {
-                    /*
-                    if (Platform.isAndroid) {
-                      AndroidIntent intent = AndroidIntent(
-                        action: 'action_view',
-                        data: snapshot.data,
-                        //type: "application/pdf"
-                      );
-                      await intent.launch();
-                    }
-                    */
-                    //await _launchURL(context, snapshot.data);
-                    _commentBottomSheet(context, snapshot.data, _settings);
-                    print(snapshot.data);
-                  },
-                );
-              })
-          : Container(),
+                    //_launchURL(await _settings.getProvider().getExtraUrl());
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CommentScreen()),
+                    );
+                  })
+              : Container(),
     );
   }
 
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+/*
   void _commentBottomSheet(context, String text, Settings _settings) {
     showModalBottomSheet(
         context: context,
@@ -177,4 +174,5 @@ class MainScreen extends StatelessWidget {
           );
         });
   }
+  */
 }
