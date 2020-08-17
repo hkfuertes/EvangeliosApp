@@ -126,6 +126,23 @@ class CiudadRedondaProvider extends TextsProvider {
     //return "https://www.ciudadredonda.org" + document.querySelectorAll('div.print-icons a')[1].attributes["href"];
   }
 
+  @override
+  bool hasDownloadableExtras(DateTime date) {
+    return date.difference(DateTime.now()).inDays == 0 &&
+        date.day == DateTime.now().day;
+  }
+
+  @override
+  Future<String> getDownloadableExtraUrl() async {
+    String startingUrl =
+        "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/comentario-homilia/hoy";
+
+    var response = await http.get(startingUrl);
+    var document = Parser.parse(response.body);
+    return "https://www.ciudadredonda.org" +
+        document.querySelectorAll('div.print-icons a')[1].attributes["href"];
+  }
+
   String _removeAllHtmlTags(String htmlText) {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 

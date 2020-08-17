@@ -19,6 +19,8 @@ abstract class TextsProvider {
 
   Future<String> getExtraUrl();
   bool hasExtras(DateTime date);
+  Future<String> getDownloadableExtraUrl();
+  bool hasDownloadableExtras(DateTime date);
 }
 
 class TextsProviders {

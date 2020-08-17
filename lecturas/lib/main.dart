@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:lecturas/Model/Settings.dart';
 import 'package:provider/provider.dart';
 
+import 'Model/Rosary.dart';
 import 'Screens/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -10,6 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Settings settings = Settings();
   await settings.retrieveConfig();
+  settings.rosary = await Rosary.getFromAsset(
+      "assets/rosary.json", "assets/rosary.skeleton.es.md");
   runApp(ChangeNotifierProvider(create: (context) => settings, child: MyApp()));
 }
 

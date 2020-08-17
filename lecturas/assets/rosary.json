@@ -1,0 +1,120 @@
+{
+    "misteries":[
+    {
+        "name": "gozosos",
+        "dayOfWeek": [
+            1,
+            6
+        ],
+        "misteries": [
+            "La Anunciación del Angel a la Virgen María y la Encarnación del Hijo de Dios.",
+            "La visita de María Santísima a su prima Isabel.",
+            "El nacimiento de Nuestro Señor Jesucristo en el portal de Belén.",
+            "La purificación de María Santísima y la presentación de Su Hijo en el Templo de Jerusalén.",
+            "María y José encuentran a Jesús en el Templo, después de tres días."
+        ]
+    },
+    {
+        "name": "luminosos",
+        "dayOfWeek": [
+            4
+        ],
+        "misteries": [
+            "El Bautismo de Jesús en el Jordán.",
+            "Las bodas de Caná.",
+            "El anuncio del Reino de Dios.",
+            "La Transfiguración.",
+            "La Institución de la Eucaristía."
+        ]
+    },
+    {
+        "name": "dolorosos",
+        "dayOfWeek": [
+            2,
+            5
+        ],
+        "misteries": [
+            "La oración y agonía de Jesús en el huerto de Getsemaní.",
+            "La flagelación de Jesús.",
+            "La coronación de espinas de Nuestro Señor.",
+            "El camino hacia el Calvario, llevando Jesús la Cruz a cuestas, por nuestros pecados.",
+            "La crucifixión y muerte de nuestro Señor."
+        ]
+    },
+    {
+        "name": "gloriosos",
+        "dayOfWeek": [
+            3,
+            7
+        ],
+        "misteries": [
+            "La triunfante Resurrección de Jesús.",
+            "La admirable Ascensión de Jesús al cielo.",
+            "La venida del Espíritu Santo sobre María Santísima y los Apóstoles.",
+            "La Asunción de María al cielo en cuerpo y alma.",
+            "La Coronación de María Santísima como Reina y Señora del universo."
+        ]
+    }],
+    "letanies": [
+        "Señor, ten piedad de nosotros",
+        "Cristo,ten piedad de nosotros",
+        "Señor, ten piedad de nosotros",
+        "Cristo óyenos,Cristo óyenos",
+        "Cristo escúchanos,Cristo escúchanos",
+        "Dios Padre celestial,ten piedad de nosotros",
+        "Dios Hijo redentor del mundo",
+        "Dios Espíritu Santo",
+        "Santísima Trinidad, que eres un solo Dios",
+        "Santa María, Ruega por nosotros",
+        "Santa Madre de Dios",
+        "Santa Virgen de las vírgenes",
+        "Madre de Cristo",
+        "Madre de la Iglesia",
+        "Madre de la divina gracia",
+        "Madre purísima",
+        "Madre castísima",
+        "Madre virginal",
+        "Madre inmaculada",
+        "Madre amable",
+        "Madre admirable",
+        "Madre del buen consejo",
+        "Madre del Creador",
+        "Madre del Salvador",
+        "Virgen prudentísima",
+        "Virgen digna de veneración",
+        "Virgen digna de alabanza",
+        "Virgen poderosa",
+        "Virgen clemente",
+        "Virgen fiel",
+        "Espejo de justicia",
+        "Trono de la sabiduría",
+        "Causa de nuestra alegría",
+        "Vaso espiritual",
+        "Vaso digno de honor",
+        "Vaso insigne de devoción",
+        "Rosa mística",
+        "Torre de David",
+        "Torre de marfil",
+        "Casa de oro",
+        "Arca de la alianza",
+        "Puerta del cielo",
+        "Estrella de la mañana",
+        "Salud de los enfermos",
+        "Refugio de los pecadores",
+        "Consuelo de los afligidos",
+        "Auxilio de los cristianos",
+        "Reina de los ángeles",
+        "Reina de los patriarcas",
+        "Reina de los profetas",
+        "Reina de los apóstoles",
+        "Reina de los mártires",
+        "Reina de los confesores",
+        "Reina de las vírgenes",
+        "Reina de todos los santos",
+        "Reina concebida sin pecado original",
+        "Reina elevada al cielo",
+        "Reina del santísimo rosario",
+        "Reina de las familias",
+        "Reina de la paz"
+    ]
+}

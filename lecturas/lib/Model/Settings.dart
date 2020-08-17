@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lecturas/Model/Rosary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/SettingsHelper.dart';
 import '../Model/TextsSet.dart';
@@ -27,6 +28,8 @@ class Settings extends ChangeNotifier {
   DateTime currentTime = DateTime.now();
 
   SettingsHelper _settingsHelper = SettingsHelper();
+
+  Rosary rosary;
 
   Future retrieveConfig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

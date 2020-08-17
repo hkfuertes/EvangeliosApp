@@ -1,6 +1,6 @@
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:lecturas/Screens/commentScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 import '../Model/Settings.dart';
 import 'package:provider/provider.dart';
@@ -78,17 +78,7 @@ class MainScreen extends StatelessWidget {
         centerTitle: false,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Text(
-          Util.getFullDateSpanish(_settings.currentTime),
-          maxLines: 1,
-          style: TextStyle(
-            color: (_settings.darkTheme)
-                ? Theme.of(context).textTheme.bodyText1.color
-                : Theme.of(context).primaryColor,
-            fontWeight: FontWeight.bold,
-            //fontSize: 24
-          ),
-        ),
+        title: title(context),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -127,6 +117,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
+/*
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -135,7 +126,7 @@ class MainScreen extends StatelessWidget {
     }
   }
 
-/*
+
   void _commentBottomSheet(context, String text, Settings _settings) {
     showModalBottomSheet(
         context: context,
@@ -175,4 +166,34 @@ class MainScreen extends StatelessWidget {
         });
   }
   */
+  Widget title(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Util.getDateSpanish(_settings.currentTime),
+          maxLines: 1,
+          style: TextStyle(
+            color: (_settings.darkTheme)
+                ? Theme.of(context).textTheme.bodyText1.color
+                : Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold,
+            //fontSize: 24
+          ),
+        ),
+        Text(
+          Util.getDayOfWeekSpanish(_settings.currentTime),
+          maxLines: 1,
+          style: TextStyle(
+              color: (_settings.darkTheme)
+                  ? Theme.of(context).textTheme.bodyText1.color
+                  : Theme.of(context).primaryColor,
+              fontStyle: FontStyle.italic,
+              fontSize: Theme.of(context).textTheme.bodyText1.fontSize
+              //fontSize: 24
+              ),
+        )
+      ],
+    );
+  }
 }

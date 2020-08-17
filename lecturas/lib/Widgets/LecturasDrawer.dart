@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lecturas/Model/Settings.dart';
 import 'package:lecturas/Parsers/TextsProvider.dart';
+import 'package:lecturas/Screens/rosaryScreen.dart';
 import 'package:provider/provider.dart';
 
 class LecturasDrawer extends StatelessWidget {
@@ -43,6 +44,15 @@ class LecturasDrawer extends StatelessWidget {
           Container(
             height: 3,
             color: Theme.of(context).primaryColor,
+          ),
+          ListTile(
+            title: Text("Rosario"),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RosaryScreen()),
+              );
+            },
           ),
           Opacity(
             opacity: 0.5,

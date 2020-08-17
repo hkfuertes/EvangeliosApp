@@ -134,7 +134,17 @@ class BuigleProvider extends TextsProvider {
   }
 
   @override
+  Future<String> getDownloadableExtraUrl() async {
+    return null;
+  }
+
+  @override
   bool hasExtras(DateTime date) {
+    return false;
+  }
+
+  @override
+  bool hasDownloadableExtras(DateTime date) {
     return false;
   }
 }

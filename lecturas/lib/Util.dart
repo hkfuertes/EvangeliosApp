@@ -38,4 +38,8 @@ class Util {
         " de " +
         getMonthSpanish(date);
   }
+
+  static String getDateSpanish(DateTime date) {
+    return date.day.toString() + " de " + getMonthSpanish(date);
+  }
 }

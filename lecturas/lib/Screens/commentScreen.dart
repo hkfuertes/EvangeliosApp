@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:lecturas/Model/Settings.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Util.dart';
 
@@ -16,10 +17,20 @@ class CommentScreen extends StatelessWidget {
         appBar: AppBar(
           title: title(context),
           actions: [
-            IconButton(
-              icon: Icon(Icons.file_download),
-              onPressed: () {},
-            )
+            (_settings
+                    .getProvider()
+                    .hasDownloadableExtras(_settings.currentTime))
+                ? IconButton(
+                    icon: Icon(Icons.file_download),
+                    onPressed: () async {
+                      var url = await _settings
+                          .getProvider()
+                          .getDownloadableExtraUrl();
+                      print(url);
+                      _launchURL(url);
+                    },
+                  )
+                : Container()
           ],
           elevation: 0,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -31,7 +42,7 @@ class CommentScreen extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (!snapshot.hasData) return Container();
                 var text = snapshot.data;
-                print(text);
+                //print(text);
                 return SingleChildScrollView(
                   child: Container(
                     padding: EdgeInsets.only(
@@ -82,5 +93,13 @@ class CommentScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
