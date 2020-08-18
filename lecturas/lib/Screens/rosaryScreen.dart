@@ -170,25 +170,40 @@ class RosaryScreen extends StatelessWidget {
               ),
             ),
             Column(
-              children: _settings.rosary.letanies
-                  .asMap()
-                  .entries
-                  .map((mEntry) => _settings.rosary.isPlaying()
-                      ? CheckboxListTile(
-                          dense: true,
-                          value: false,
-                          title: Text(mEntry.value),
-                          onChanged: (_) async {},
-                        )
-                      : Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: padding + 6),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(mEntry.value),
-                          ),
-                        ))
-                  .toList(),
+              children: _settings.rosary.letanies.asMap().entries.map((mEntry) {
+                var splitText = mEntry.value.split("|");
+                if (_settings.rosary.isPlaying()) {
+                  if (splitText.length > 1) {
+                    return CheckboxListTile(
+                      dense: true,
+                      value: false,
+                      title: Text(splitText[0]),
+                      subtitle: Text(splitText[1]),
+                      onChanged: (_) async {},
+                    );
+                  } else {
+                    return CheckboxListTile(
+                      dense: true,
+                      value: false,
+                      title: Text(splitText[0]),
+                      onChanged: (_) async {},
+                    );
+                  }
+                } else {
+                  if (splitText.length > 1) {
+                    return ListTile(
+                      dense: true,
+                      title: Text(splitText[0]),
+                      subtitle: Text(splitText[1]),
+                    );
+                  } else {
+                    return ListTile(
+                      dense: true,
+                      title: Text(splitText[0]),
+                    );
+                  }
+                }
+              }).toList(),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: padding),
