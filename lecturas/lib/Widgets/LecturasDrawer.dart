@@ -45,15 +45,6 @@ class LecturasDrawer extends StatelessWidget {
             height: 3,
             color: Theme.of(context).primaryColor,
           ),
-          ListTile(
-            title: Text("Rosario"),
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RosaryScreen()),
-              );
-            },
-          ),
           Opacity(
             opacity: 0.5,
             child: ListTile(
@@ -84,6 +75,18 @@ class LecturasDrawer extends StatelessWidget {
             title: Text('Buigle'),
             subtitle: Text('www.buigle.net'),
           ),
+          Divider(),
+          ListTile(
+            title: Text("Rosario"),
+            leading: Icon(FontAwesomeIcons.alignJustify),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RosaryScreen()),
+              );
+            },
+          ),
+          Divider(),
           Opacity(
             opacity: 0.5,
             child: ListTile(

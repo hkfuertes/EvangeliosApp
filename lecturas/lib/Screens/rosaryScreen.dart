@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lecturas/Model/Rosary.dart';
 import 'package:lecturas/Model/Settings.dart';
@@ -11,7 +12,7 @@ class RosaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _settings = Provider.of<Settings>(context);
-    var padding = EdgeInsets.all(16);
+    var padding = 8.0;
     var oneTo13 = List<int>.generate(13, (i) => i + 1);
     var name = _settings.rosary.getTodayTitle();
     return Scaffold(
@@ -41,8 +42,8 @@ class RosaryScreen extends StatelessWidget {
         body: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: MarkdownBody(
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              child: Html(
                 data: _settings.rosary.skeletonSplitted[0].replaceAll(
                     Rosary.MISTERIES_NAME_TOKEN,
                     name[0].toUpperCase() + name.substring(1).toLowerCase()),
@@ -163,14 +164,35 @@ class RosaryScreen extends StatelessWidget {
                           ))
                     .toList()),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: MarkdownBody(
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              child: Html(
                 data: _settings.rosary.skeletonSplitted[1],
               ),
             ),
+            Column(
+              children: _settings.rosary.letanies
+                  .asMap()
+                  .entries
+                  .map((mEntry) => _settings.rosary.isPlaying()
+                      ? CheckboxListTile(
+                          dense: true,
+                          value: false,
+                          title: Text(mEntry.value),
+                          onChanged: (_) async {},
+                        )
+                      : Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: padding + 6),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(mEntry.value),
+                          ),
+                        ))
+                  .toList(),
+            ),
             Padding(
-              padding: padding,
-              child: MarkdownBody(
+              padding: EdgeInsets.symmetric(horizontal: padding),
+              child: Html(
                 data: _settings.rosary.skeletonSplitted[2],
               ),
             ),

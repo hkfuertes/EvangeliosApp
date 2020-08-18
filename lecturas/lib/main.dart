@@ -12,7 +12,7 @@ void main() async {
   Settings settings = Settings();
   await settings.retrieveConfig();
   settings.rosary = await Rosary.getFromAsset(
-      "assets/rosary.json", "assets/rosary.skeleton.es.md");
+      "assets/rosary.json", "assets/rosary.skeleton.es.html");
   runApp(ChangeNotifierProvider(create: (context) => settings, child: MyApp()));
 }
 
