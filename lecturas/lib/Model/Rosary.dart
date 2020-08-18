@@ -8,8 +8,46 @@ class Rosary {
   final String skeleton;
   List<String> skeletonSplitted;
 
+  static const CURRENT_MISTERY = 0;
+  static const CURRENT_COUNT = 1;
+  List<int> playing = [-1, -1];
+
+  bool isPlaying() {
+    return playing[CURRENT_MISTERY] != -1 || playing[CURRENT_COUNT] != -1;
+  }
+
+  restartPlayer() {
+    playing[CURRENT_MISTERY] = -1;
+    playing[CURRENT_COUNT] = -1;
+  }
+
+  nextMistery() {
+    //1 our father, 10 hail mary, 1 glory = 12;
+    playing[CURRENT_COUNT]++;
+    if (playing[CURRENT_COUNT] == 13) {
+      playing[CURRENT_COUNT] = 0;
+      playing[CURRENT_MISTERY]++;
+    }
+    if (playing[CURRENT_MISTERY] == 5) {
+      restartPlayer();
+    }
+  }
+
+  previousMistery() {
+    playing[CURRENT_COUNT]--;
+    if (playing[CURRENT_COUNT] == -1) {
+      playing[CURRENT_COUNT] = 11;
+      playing[CURRENT_MISTERY]--;
+    }
+
+    if (playing[CURRENT_MISTERY] == -1) {
+      restartPlayer();
+    }
+  }
+
   static const MISTERIES_SPLIT_TOKEN = "<!-- MISTERIOS -->";
   static const LETANIES_SPLIT_TOKEN = "<!-- LETANIAS -->";
+  static const MISTERIES_NAME_TOKEN = "{# misterios #}";
 
   Rosary(this.misteries, this.letanies, this.skeleton) {
     var firstSplit = this.skeleton.split(MISTERIES_SPLIT_TOKEN);

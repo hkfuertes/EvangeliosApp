@@ -18,8 +18,12 @@
 
 **T.**- Oh Jesús mío, perdona nuestros pecados y líbranos del fuego del infierno, lleva al cielo a todas las almas y socorre especialmente a las más necesitadas de tu misericordia. Amén
 -->
+---
+## Misterios {# misterios #}
 
 <!-- MISTERIOS -->
+
+---
 
 _Al terminar el 5° Misterio_
 
@@ -38,6 +42,7 @@ _Al terminar el 5° Misterio_
 
 **T.** Dios te salve Reina y Madre de misericordia, vida, dulzura y esperanza nuestra; Dios te salve. A ti llamamos los desterrados hijos de Eva; a ti suspiramos, gimiendo y llorando en este valle de lágrimas. ¡Ea pues!, Señora y abogada nuestra: vuelve a nosotros tus ojos misericordiosos, y después de este destierro, muéstranos a Jesús: fruto bendito de tu vientre. ¡Oh clemente, oh piadosa, oh dulce Virgen María!. Ruega por nosotros Santa Madre de Dios, para que seamos dignos de alcanzar las divinas gracias y promesas de nuestro Señor Jesucristo. Amén
 
+---
 
 ## Letanías
 
