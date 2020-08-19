@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ScriptWidget extends StatelessWidget {
   final String text, textIndex;

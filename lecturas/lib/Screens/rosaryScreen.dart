@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lecturas/Model/Rosary.dart';
 import 'package:lecturas/Model/Settings.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,8 @@ class RosaryScreen extends StatelessWidget {
       },
       child: Theme(
         data: _settings.rosary.isPlaying()
-            ? ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black)
+            ? Util.getDarkTheme()
+                .copyWith(scaffoldBackgroundColor: Colors.black)
             : Theme.of(context),
         child: Scaffold(
             appBar: AppBar(
@@ -56,7 +56,9 @@ class RosaryScreen extends StatelessWidget {
               ],
             ),
             body: Theme(
-              data: Util.getScaledTextTheme(context, _settings.scaleFactor),
+              data: Theme.of(context).copyWith(
+                  textTheme:
+                      Util.getScaledTextTheme(context, _settings.scaleFactor)),
               child: ListView(
                 children: [
                   Padding(

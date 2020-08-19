@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 class PsalmWidget extends StatelessWidget {
   final String psalm, psalmResponse, psalmIndex;

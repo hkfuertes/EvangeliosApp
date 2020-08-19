@@ -27,7 +27,7 @@ dependencies:
   sqflite:
   share:
   font_awesome_flutter:
-  flutter_markdown:
+  #flutter_markdown:
   flutter:
     sdk: flutter
   flutter_localizations:

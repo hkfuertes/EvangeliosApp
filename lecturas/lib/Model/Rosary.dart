@@ -11,7 +11,7 @@ class Rosary {
   // 5 for each mistery and the 6th are the letanies.
   static const CURRENT_MISTERY = 0;
   static const CURRENT_COUNT = 1;
-  List<int> playing = [5, -1]; // = [-1, -1];
+  List<int> playing = [-1, -1];
 
   bool isPlaying() {
     return playing[CURRENT_MISTERY] != -1 || playing[CURRENT_COUNT] != -1;

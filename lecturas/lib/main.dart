@@ -7,6 +7,8 @@ import 'Screens/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'Util.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Settings settings = Settings();
@@ -25,22 +27,8 @@ class MyApp extends StatelessWidget {
       title: 'Lecturas',
       debugShowCheckedModeBanner: false,
       themeMode: (_settings.useDarkTheme()) ? ThemeMode.dark : ThemeMode.light,
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.brown),
-        ),
-        primarySwatch: Colors.brown,
-      ),
-      darkTheme: ThemeData(
-        appBarTheme: AppBarTheme(
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
-        toggleableActiveColor: Colors.brown,
-        brightness: Brightness.dark,
-        primarySwatch: Colors.brown,
-        primaryColor: Colors.brown,
-        accentColor: Colors.brown,
-      ),
+      theme: Util.getLightTheme(),
+      darkTheme: Util.getDarkTheme(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate, // if it's a RTL language
