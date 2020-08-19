@@ -8,12 +8,21 @@ class Rosary {
   final String skeleton;
   List<String> skeletonSplitted;
 
+  // 5 for each mistery and the 6th are the letanies.
   static const CURRENT_MISTERY = 0;
   static const CURRENT_COUNT = 1;
-  List<int> playing = [-1, -1];
+  List<int> playing = [5, -1]; // = [-1, -1];
 
   bool isPlaying() {
     return playing[CURRENT_MISTERY] != -1 || playing[CURRENT_COUNT] != -1;
+  }
+
+  bool onLetanies() {
+    return playing[CURRENT_MISTERY] == 5;
+  }
+
+  bool endOfMistery() {
+    return playing[CURRENT_COUNT] == 12 && !onLetanies();
   }
 
   restartPlayer() {
@@ -24,11 +33,11 @@ class Rosary {
   nextMistery() {
     //1 our father, 10 hail mary, 1 glory = 12;
     playing[CURRENT_COUNT]++;
-    if (playing[CURRENT_COUNT] == 13) {
+    if (playing[CURRENT_COUNT] == 13 && !onLetanies()) {
       playing[CURRENT_COUNT] = 0;
       playing[CURRENT_MISTERY]++;
     }
-    if (playing[CURRENT_MISTERY] == 5) {
+    if (playing[CURRENT_COUNT] == letanies.length && onLetanies()) {
       restartPlayer();
     }
   }

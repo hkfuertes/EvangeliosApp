@@ -1,4 +1,5 @@
 //import 'package:flutter_html/flutter_html.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lecturas/Screens/commentScreen.dart';
 //import 'package:url_launcher/url_launcher.dart';
 
@@ -82,7 +83,7 @@ class MainScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.calendar_today,
+              FontAwesomeIcons.calendarAlt,
             ),
             onPressed: () async {
               _settings.currentTime = await _selectDate(context, _settings);

@@ -59,6 +59,14 @@ class Settings extends ChangeNotifier {
     return currentTexts;
   }
 
+  bool useDarkTheme() {
+    if (rosary != null && rosary.isPlaying()) {
+      return true;
+    } else {
+      return darkTheme;
+    }
+  }
+
   void update() {
     saveConfig().then((_) {
       /*

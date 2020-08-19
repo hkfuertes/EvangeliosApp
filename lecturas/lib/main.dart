@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lecturas',
       debugShowCheckedModeBanner: false,
-      themeMode: (_settings.darkTheme) ? ThemeMode.dark : ThemeMode.light,
+      themeMode: (_settings.useDarkTheme()) ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.brown),

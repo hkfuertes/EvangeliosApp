@@ -78,7 +78,7 @@ class LecturasDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text("Rosario"),
-            leading: Icon(FontAwesomeIcons.alignJustify),
+            leading: Icon(FontAwesomeIcons.handHoldingMedical),
             onTap: () async {
               Navigator.push(
                 context,
