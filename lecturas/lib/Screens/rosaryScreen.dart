@@ -17,6 +17,7 @@ class RosaryScreen extends StatelessWidget {
     var name = _settings.rosary.getTodayTitle();
     return WillPopScope(
       onWillPop: () async {
+        Wakelock.disable();
         _settings.rosary.restartPlayer();
         _settings.update();
         return true;
