@@ -27,8 +27,8 @@ class TextsSet {
     if (this.secondIndex != null)
       return [
         Script(this.firstIndex, this.first),
-        Script(this.secondIndex, this.second),
         Psalm(this.psalmIndex, this.psalm, this.psalmResponse),
+        Script(this.secondIndex, this.second),
         Godspel(this.godspelIndex, this.godspel),
       ];
     else
