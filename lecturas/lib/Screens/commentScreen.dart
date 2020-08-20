@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lecturas/Model/Settings.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,11 +20,9 @@ class CommentScreen extends StatelessWidget {
         appBar: AppBar(
           title: title(context),
           actions: [
-            (_settings
-                    .getProvider()
-                    .hasDownloadableExtras(_settings.currentTime))
+            _settings.getProvider().hasDownloadableExtras(_settings.currentTime)
                 ? IconButton(
-                    icon: Icon(Icons.file_download),
+                    icon: Icon(FontAwesomeIcons.globe),
                     onPressed: () async {
                       var url = await _settings
                           .getProvider()

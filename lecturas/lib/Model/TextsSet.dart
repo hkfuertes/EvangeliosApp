@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'ScriptText.dart';
+
 class TextsSet {
   DateTime date;
   final String first, firstIndex;
@@ -20,6 +22,22 @@ class TextsSet {
       this.godspel,
       this.godspelIndex,
       this.provider);
+
+  List<ScriptText> getTextsAsObjects() {
+    if (this.secondIndex != null)
+      return [
+        Script(this.firstIndex, this.first),
+        Script(this.secondIndex, this.second),
+        Psalm(this.psalmIndex, this.psalm, this.psalmResponse),
+        Godspel(this.godspelIndex, this.godspel),
+      ];
+    else
+      return [
+        Script(this.firstIndex, this.first),
+        Psalm(this.psalmIndex, this.psalm, this.psalmResponse),
+        Godspel(this.godspelIndex, this.godspel),
+      ];
+  }
 
   void setDate(DateTime date) {
     this.date = date;

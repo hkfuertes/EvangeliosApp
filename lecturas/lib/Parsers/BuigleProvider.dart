@@ -5,6 +5,8 @@ import 'package:html/parser.dart' as Parser;
 import 'TextsProvider.dart';
 
 class BuigleProvider extends TextsProvider {
+  RegExp _onlyIndexRegex = RegExp(r'[^ ]* \d\d?, \d\d?\-\d\d?$');
+
   RegExp firstRegex =
       new RegExp(r'PRIMERA LECTURA.*SALMO', multiLine: true, dotAll: true);
   RegExp secondRegex =
@@ -48,18 +50,32 @@ class BuigleProvider extends TextsProvider {
 
     var godspel = this.getGodspell(texts);
     var godspelIndex = this.getGodspellIndex(texts);
-    return TextsSet(
-        null,
-        first,
-        firstIndex,
-        second,
-        secondIndex,
-        psalm,
-        psalmIndex,
-        psalmResponse,
-        godspel,
-        godspelIndex,
-        getProviderNameForDisplay());
+    if (secondIndex != null)
+      return TextsSet(
+          null,
+          first,
+          _onlyIndexRegex.stringMatch(firstIndex) ?? firstIndex,
+          second,
+          _onlyIndexRegex.stringMatch(secondIndex) ?? secondIndex,
+          psalm,
+          psalmIndex,
+          psalmResponse,
+          godspel,
+          _onlyIndexRegex.stringMatch(godspelIndex) ?? godspelIndex,
+          getProviderNameForDisplay());
+    else
+      return TextsSet(
+          null,
+          first,
+          _onlyIndexRegex.stringMatch(firstIndex) ?? firstIndex,
+          null,
+          null,
+          psalm,
+          psalmIndex,
+          psalmResponse,
+          godspel,
+          _onlyIndexRegex.stringMatch(godspelIndex) ?? godspelIndex,
+          getProviderNameForDisplay());
   }
 
   String getGodspellIndex(String chunk) {

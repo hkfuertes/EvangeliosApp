@@ -1,6 +1,7 @@
 //import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lecturas/Screens/commentScreen.dart';
+import 'package:lecturas/Widgets/ScriptTextWidget.dart';
 //import 'package:url_launcher/url_launcher.dart';
 
 import '../Model/Settings.dart';
@@ -22,41 +23,14 @@ class MainScreen extends StatelessWidget {
       BuildContext context, TextsSet textsSet, Settings _settings) {
     double spaceForCopyRight = 10;
     TextStyle copyRightStyle = TextStyle(fontSize: 10, color: Colors.grey);
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(
-            top: 8.0, left: 16.0, right: 16.0, bottom: 16.0),
-        child: Column(children: <Widget>[
-          ScriptWidget(
-            textsSet.first,
-            textsSet.firstIndex,
-            "Palabra de Dios",
-            zoomFactor: _settings.scaleFactor * 100,
-          ),
-          Divider(),
-          PsalmWidget(
-              textsSet.psalm, textsSet.psalmResponse, textsSet.psalmIndex,
-              zoomFactor: _settings.scaleFactor * 100),
-          Divider(),
-          (textsSet.second != null)
-              ? ScriptWidget(
-                  textsSet.second, textsSet.secondIndex, "Palabra de Dios",
-                  zoomFactor: _settings.scaleFactor * 100)
-              : Container(),
-          (textsSet.second != null) ? Divider() : Container(),
-          ScriptWidget(
-              textsSet.godspel, textsSet.godspelIndex, "Palabra del Señor",
-              zoomFactor: _settings.scaleFactor * 100),
-          Container(
-            height: spaceForCopyRight,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-            Text(
-              _settings.getProvider().getProviderNameForDisplay(),
-              style: copyRightStyle,
-            ),
-          ])
-        ]),
+    return Theme(
+      data: Theme.of(context).copyWith(
+          textTheme: Util.getScaledTextTheme(context, _settings.scaleFactor)),
+      child: ListView(
+        children: _settings.currentTexts
+            .getTextsAsObjects()
+            .map((e) => ScriptTextWidget(scriptText: e, settings: _settings))
+            .toList(),
       ),
     );
   }
@@ -96,7 +70,7 @@ class MainScreen extends StatelessWidget {
         future: _settings.retrieveText(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData)
-            return LoadingWidget("cargando...");
+            return LoadingWidget("Cargando...");
           else
             return _buildMainLayout(context, snapshot.data, _settings);
         },
@@ -107,8 +81,6 @@ class MainScreen extends StatelessWidget {
               ? FloatingActionButton(
                   child: Icon(Icons.comment),
                   onPressed: () async {
-                    //_launchURL(await _settings.getProvider().getExtraUrl());
-
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CommentScreen()),

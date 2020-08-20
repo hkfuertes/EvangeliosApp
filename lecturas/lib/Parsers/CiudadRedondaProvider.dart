@@ -7,6 +7,8 @@ import 'TextsProvider.dart';
 import 'package:http/http.dart' as http;
 
 class CiudadRedondaProvider extends TextsProvider {
+  RegExp _onlyIndexRegex = RegExp(r'[^ ]* \(.*\)$');
+
   @override
   TextsSet parse(String body) {
     var document = Parser.parse(body);
@@ -16,27 +18,27 @@ class CiudadRedondaProvider extends TextsProvider {
       return TextsSet(
           null,
           getText(texts[0]),
-          getTextIndex(texts[0]),
+          _onlyIndexRegex.stringMatch(getTextIndex(texts[0])),
           getText(texts[2]),
-          getTextIndex(texts[2]),
+          _onlyIndexRegex.stringMatch(getTextIndex(texts[2])),
           getPsalm(texts[1]),
           getPsalmIndex(texts[1]),
           getPsalmResponse(texts[1]),
           getText(texts[3]),
-          getTextIndex(texts[3]),
+          _onlyIndexRegex.stringMatch(getTextIndex(texts[3])),
           getProviderNameForDisplay());
     } else {
       return TextsSet(
           null,
           getText(texts[0]),
-          getTextIndex(texts[0]),
+          _onlyIndexRegex.stringMatch(getTextIndex(texts[0])),
           null,
           null,
           getPsalm(texts[1]),
           getPsalmIndex(texts[1]),
           getPsalmResponse(texts[1]),
           getText(texts[2]),
-          getTextIndex(texts[2]),
+          _onlyIndexRegex.stringMatch(getTextIndex(texts[2])),
           getProviderNameForDisplay());
     }
   }
@@ -137,6 +139,7 @@ class CiudadRedondaProvider extends TextsProvider {
     String startingUrl =
         "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/comentario-homilia/hoy";
 
+    return startingUrl;
     var response = await http.get(startingUrl);
     var document = Parser.parse(response.body);
     return "https://www.ciudadredonda.org" +

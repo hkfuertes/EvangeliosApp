@@ -75,6 +75,7 @@ class LecturasDrawer extends StatelessWidget {
             title: Text('Buigle'),
             subtitle: Text('www.buigle.net'),
           ),
+          /*
           Divider(),
           ListTile(
             title: Text("Rosario"),
@@ -87,6 +88,7 @@ class LecturasDrawer extends StatelessWidget {
             },
           ),
           Divider(),
+          */
           Opacity(
             opacity: 0.5,
             child: ListTile(
