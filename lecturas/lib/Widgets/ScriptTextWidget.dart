@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:lecturas/Model/ScriptText.dart';
 import 'package:lecturas/Model/Settings.dart';
+import 'package:provider/provider.dart';
 
 class ScriptTextWidget extends StatelessWidget {
   final ScriptText scriptText;
-  final Settings settings;
   final TextStyle _responseStyle = TextStyle(fontWeight: FontWeight.bold);
 
   RegExp _onlyIndexRegex = RegExp(r'[^ ]* \(.*\)$');
 
   TextStyle _bodySize, _titleSize;
 
-  ScriptTextWidget({Key key, this.scriptText, this.settings}) : super(key: key);
+  ScriptTextWidget({Key key, this.scriptText}) : super(key: key);
 
   Widget buildScript(BuildContext context, ScriptText text) {
     String response, typeDisplayName;
     if (text.type == ScriptText.SCRIPT_TAG) {
-      response = "Palabra del Señor";
+      response = "Palabra de Dios";
       typeDisplayName = "Lectura";
     } else {
-      response = "Palabra de Dios";
+      response = "Palabra del Señor";
       typeDisplayName = "Evangelio";
     }
     return Column(
@@ -87,14 +87,12 @@ class ScriptTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var settings = Provider.of<Settings>(context);
+    var scaleFactor = settings?.scaleFactor ?? 1;
     _bodySize = TextStyle(
-        fontSize: Theme.of(context).textTheme.bodyText2.fontSize *
-            settings.scaleFactor *
-            0.95);
+        fontSize: Theme.of(context).textTheme.bodyText1.fontSize * scaleFactor);
     _titleSize = TextStyle(
-        fontSize: Theme.of(context).textTheme.headline6.fontSize *
-            settings.scaleFactor *
-            0.95);
+        fontSize: Theme.of(context).textTheme.headline6.fontSize * scaleFactor);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(

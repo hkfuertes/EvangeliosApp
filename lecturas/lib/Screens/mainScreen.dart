@@ -29,7 +29,7 @@ class MainScreen extends StatelessWidget {
       child: ListView(
         children: _settings.currentTexts
             .getTextsAsObjects()
-            .map((e) => ScriptTextWidget(scriptText: e, settings: _settings))
+            .map((e) => ScriptTextWidget(scriptText: e))
             .toList(),
       ),
     );

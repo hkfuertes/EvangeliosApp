@@ -105,10 +105,10 @@ class LecturasDrawer extends StatelessWidget {
                     _settings.scaleFactor = 1.2;
                     break;
                   case 1:
-                    _settings.scaleFactor = 1.7;
+                    _settings.scaleFactor = 1.5;
                     break;
                   case 2:
-                    _settings.scaleFactor = 2;
+                    _settings.scaleFactor = 1.8;
                     break;
                   default:
                     _settings.scaleFactor = 1;
@@ -126,19 +126,19 @@ class LecturasDrawer extends StatelessWidget {
                   "A",
                   style: TextStyle(
                       fontSize:
-                          Theme.of(context).textTheme.bodyText1.fontSize * 1.7),
+                          Theme.of(context).textTheme.bodyText1.fontSize * 1.5),
                 ),
                 Text(
                   "A",
                   style: TextStyle(
                       fontSize:
-                          Theme.of(context).textTheme.bodyText1.fontSize * 2),
+                          Theme.of(context).textTheme.bodyText1.fontSize * 1.8),
                 ),
               ],
               isSelected: [
                 _settings.scaleFactor == 1.2,
-                _settings.scaleFactor == 1.7,
-                _settings.scaleFactor == 2
+                _settings.scaleFactor == 1.5,
+                _settings.scaleFactor == 1.8
               ],
             ),
           ),
