@@ -13,7 +13,9 @@ abstract class Provider {
 
   Future<TextsSet> get(DateTime date) async {
     var response = await http.get(Uri.parse(getProviderUrlForDate(date)));
-    TextsSet texts = parse(response.body);
+    TextsSet texts = parse(response.body
+        .replaceAll("Palabra de Dios.", "")
+        .replaceAll("Palabra del Señor.", ""));
     texts.setDate(date);
     return texts;
   }

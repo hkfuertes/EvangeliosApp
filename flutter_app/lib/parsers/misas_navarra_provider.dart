@@ -40,6 +40,7 @@ class MisasNavarraProvider extends Provider {
         .toList();
 
     return TextsSet(
+        from: getProviderNameForDisplay(),
         first: firstParts.sublist(2).join("\n"),
         firstIndex: firstParts[1].trim(),
         psalm: psalmParts.sublist(2).join("\n").replaceAll("R.", "\n"),

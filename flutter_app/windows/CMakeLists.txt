@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(lecturas LANGUAGES CXX)
 
-set(BINARY_NAME "lecturas")
+set(BINARY_NAME "Lecturas")
 
 cmake_policy(SET CMP0063 NEW)
 

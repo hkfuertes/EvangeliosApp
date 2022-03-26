@@ -4,6 +4,7 @@ class TextsSet {
   final String? second, secondIndex;
   final String psalm, psalmIndex, psalmResponse;
   final String godspel, godspelIndex;
+  final String from;
 
   TextsSet(
       {this.date,
@@ -15,7 +16,8 @@ class TextsSet {
       required this.psalmIndex,
       required this.psalmResponse,
       required this.godspel,
-      required this.godspelIndex});
+      required this.godspelIndex,
+      required this.from});
 
   void setDate(DateTime date) {
     this.date = date;

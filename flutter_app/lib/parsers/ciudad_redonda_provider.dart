@@ -13,6 +13,7 @@ class CiudadRedondaProvider extends Provider {
     if (texts.length > 3) {
       //Sunday
       return TextsSet(
+          from: getProviderNameForDisplay(),
           first: getText(texts[0]),
           firstIndex: getTextIndex(texts[0]),
           second: getText(texts[2]),
@@ -24,6 +25,7 @@ class CiudadRedondaProvider extends Provider {
           godspelIndex: getTextIndex(texts[3]));
     } else {
       return TextsSet(
+          from: getProviderNameForDisplay(),
           first: getText(texts[0]),
           firstIndex: getTextIndex(texts[0]),
           psalm: getPsalm(texts[1]),

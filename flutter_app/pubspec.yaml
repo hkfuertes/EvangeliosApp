@@ -39,15 +39,18 @@ dependencies:
   html: ^0.15.0
 
 flutter_icons:
-    android: true
-    ios: false
-    image_path_android: assets/bible_icon.png
-    image_path_ios: assets/bible_icon.png
-    adaptive_icon_background: assets/bible_icon_bg.png
-    adaptive_icon_foreground: assets/bible_icon_fg.png
+  android: true
+  ios: false
+  image_path_android: assets/bible_icon.png
+  image_path_ios: assets/bible_icon.png
+  adaptive_icon_background: assets/bible_icon_bg.png
+  adaptive_icon_foreground: assets/bible_icon_fg.png
 
 dev_dependencies:
   flutter_launcher_icons:
+    git:
+      url: https://github.com/Davenchy/flutter_launcher_icons.git
+      ref: fixMinSdkParseFlutter2.8
   flutter_test:
     sdk: flutter
 

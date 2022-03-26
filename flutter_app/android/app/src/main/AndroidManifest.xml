@@ -2,8 +2,8 @@
     package="net.mfuertes.lecturas">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="lecturas"
-        android:name="Lecturas"
+        android:label="Lecturas"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -1,7 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:html/parser.dart' as Parser;
-import 'package:lecturas/parsers/misas_navarra_provider.dart';
-
 import '../model/text_sets.dart';
 import 'provider.dart';
 
@@ -38,75 +36,50 @@ class BuigleProvider extends Provider {
         .innerHtml
         .replaceAll("\n", "");
 
-    var misanavarra = MisasNavarraProvider();
-    return misanavarra.parse(texts);
+    return parseFromSection(texts, this);
   }
 
-  String getGodspelIndex(String chunk) {
-    return godspellRegex.stringMatch(chunk)?.split("<br>")[2] ?? "N/A";
-  }
+  static TextsSet parseFromSection(String body, Provider provider) {
+    var chunk = body.split("PRIMERA LECTURA")[1];
+    var firstParts = chunk
+        .split("SALMO RESPONSORIAL")[0]
+        .replaceAll("<br>", "\n")
+        .trim()
+        .split("\n")
+        .where((e) => e != "")
+        .toList();
+    chunk = chunk.split("SALMO RESPONSORIAL")[1];
+    var psalmParts = chunk
+        .split("Versículo")[0]
+        .replaceAll("<br>", "\n")
+        .trim()
+        .split("\n")
+        .where((e) => e != "")
+        .toList();
+    var godspelParts = chunk
+        .split("EVANGELIO")[1]
+        .replaceAll("<br>", "\n")
+        .trim()
+        .split("\n")
+        .where((e) => e != "")
+        .toList();
 
-  String getGodspel(String chunk) {
-    var parts = godspellRegex.stringMatch(chunk)?.split("<br>");
-    return parts
-            ?.sublist(3, parts.length - 1)
-            .join("\n")
-            .replaceAll(String.fromCharCode(0x93), "")
-            .replaceAll(String.fromCharCode(0x94), "")
-            .trim() ??
-        "N/A";
-  }
+    var sTest = psalmParts.join("\n").split("SEGUNDA LECTURA");
+    List<String>? secondParts;
+    if (sTest.length > 1) {
+      secondParts = sTest[1].split("\n").where((e) => e != "").toList();
+    }
 
-  String getFirstIndex(String chunk) {
-    return firstRegex.stringMatch(chunk)?.split("<br>")[2] ?? "N/A";
-  }
-
-  String getFirst(String chunk) {
-    var parts = firstRegex.stringMatch(chunk)?.split("<br>") ?? [];
-    return parts.sublist(3, parts.length - 3).join("\n").trim();
-  }
-
-  String? getSecondIndex(String chunk) {
-    var match = secondRegex.stringMatch(chunk);
-    if (match == null) return null;
-    return match.split("<br>")[2];
-  }
-
-  String? getSecond(String chunk) {
-    var match = secondRegex.stringMatch(chunk);
-    if (match == null) return null;
-
-    var parts = match.split("<br>");
-    return parts.sublist(3, parts.length - 4).join("\n").trim();
-  }
-
-  String getPsalm(String chunk, bool sunday) {
-    var parts = !sunday
-        ? psalmRegex.stringMatch(chunk)?.split("<br>")
-        : psalmSundayRegex.stringMatch(chunk)?.split("<br>");
-    return parts
-            ?.sublist(2, parts.length - 2)
-            .join("\n")
-            .replaceAll(" R.", " R/.\n")
-            .trim() ??
-        "N/A";
-  }
-
-  String getPsalmIndex(String chunk) {
-    return psalmRegex
-            .stringMatch(chunk)
-            ?.split("<br>")[0]
-            .trim()
-            .replaceAll("SALMO RESPONSORIAL", "Sal") ??
-        "N/A";
-  }
-
-  String getPsalmResponse(String chunk) {
-    return psalmRegex
-            .stringMatch(chunk)
-            ?.split("<br>")[1]
-            .trim()
-            .replaceAll("R.", "R/.") ??
-        "N/A";
+    return TextsSet(
+        from: provider.getProviderNameForDisplay(),
+        second: secondParts?.sublist(2).join("\n"),
+        secondIndex: secondParts?.elementAt(1).trim(),
+        first: firstParts.sublist(2).join("\n"),
+        firstIndex: firstParts[1].trim(),
+        psalm: psalmParts.sublist(2).join("\n").replaceAll("R.", "\n"),
+        psalmIndex: "Salmo " + psalmParts[0].trim(),
+        psalmResponse: psalmParts[1].replaceAll("R.", "").trim(),
+        godspel: godspelParts.sublist(2, godspelParts.length - 2).join("\n"),
+        godspelIndex: godspelParts[1].trim());
   }
 }
