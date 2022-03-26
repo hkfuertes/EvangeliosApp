@@ -68,7 +68,7 @@ class ScriptWidget extends StatelessWidget {
                     textScaleFactor: 0.8,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w100),
+                        fontWeight: FontWeight.w200),
                   ),
                 const SizedBox(
                   height: 8,

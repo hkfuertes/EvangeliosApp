@@ -107,8 +107,9 @@ class _MainPageState extends State<MainPage> {
               foregroundColor: MaterialStateProperty.all(Colors.white)),
           onPressed: () {
             showDatePicker(
+                    locale: const Locale("es", "ES"),
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: _selectedDate ?? DateTime.now(),
                     firstDate:
                         DateTime.now().subtract(const Duration(days: 365)),
                     lastDate: DateTime.now().add(const Duration(days: 365)))

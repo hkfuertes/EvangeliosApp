@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:lecturas/pages/main_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -24,6 +25,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      supportedLocales: const [
+        Locale('es', 'ES'),
+      ],
       title: 'Lecturas',
       theme: ThemeData.dark(),
       themeMode: ThemeMode.dark,

@@ -76,7 +76,12 @@ class BuigleProvider extends Provider {
         secondIndex: secondParts?.elementAt(1).trim(),
         first: firstParts.sublist(2).join("\n"),
         firstIndex: firstParts[1].trim(),
-        psalm: psalmParts.sublist(2).join("\n").replaceAll("R.", "\n"),
+        psalm: psalmParts
+            .sublist(2)
+            .join("\n")
+            .split("SEGUNDA LECTURA")[0]
+            .trim()
+            .replaceAll("R.", "\n"),
         psalmIndex: "Salmo " + psalmParts[0].trim(),
         psalmResponse: psalmParts[1].replaceAll("R.", "").trim(),
         godspel: godspelParts.sublist(2, godspelParts.length - 2).join("\n"),

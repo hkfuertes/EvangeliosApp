@@ -32,7 +32,7 @@ class PsalmWidget extends StatelessWidget {
                     textScaleFactor: 0.8,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w100),
+                        fontWeight: FontWeight.w200),
                   )
                 : null,
             children: texts
@@ -54,7 +54,7 @@ class PsalmWidget extends StatelessWidget {
                               Text(
                                 e.trim() + " R.",
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w100),
+                                    fontWeight: FontWeight.w200),
                               ),
                               const SizedBox(
                                 height: 8,
@@ -84,7 +84,7 @@ class PsalmWidget extends StatelessWidget {
                     textScaleFactor: 0.8,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w100),
+                        fontWeight: FontWeight.w200),
                   ),
                 const SizedBox(
                   height: 8,
