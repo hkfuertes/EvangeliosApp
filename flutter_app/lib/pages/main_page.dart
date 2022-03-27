@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lecturas/constants.dart';
+import 'package:lecturas/model/settings_controller.dart';
 import 'package:lecturas/panels/settings_panel.dart';
 import 'package:lecturas/parsers/buigle_provider.dart';
-import 'package:lecturas/parsers/ciudad_redonda_provider.dart';
 import 'package:lecturas/widgets/psalm_widget.dart';
 import 'package:lecturas/widgets/script_widget.dart';
 
@@ -23,15 +23,29 @@ class _MainPageState extends State<MainPage> {
   final DateFormat _formatter = DateFormat('dd/MM/yyyy');
   TextsProvider _currentProvider = BuigleProvider();
 
+  DateTime _getDate({preferSunday = false}) {
+    if (_selectedDate != null) {
+      return _selectedDate!;
+    } else {
+      var now = DateTime.now();
+      return (preferSunday && now.hour > 19)
+          ? now.add(const Duration(days: 1))
+          : now;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    var settings = SettingsController.of(context);
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor),
       child: Scaffold(
         body: FutureBuilder<TextsSet>(
-            future: _currentProvider.get(_selectedDate ?? DateTime.now()),
+            future: settings
+                .getProvider()
+                .get(_getDate(preferSunday: settings.getPreferSunday())),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data != null) {
                 return SafeArea(
@@ -42,7 +56,7 @@ class _MainPageState extends State<MainPage> {
                         children: _textsSetToList(snapshot.data!),
                       ),
                     ),
-                    _buildHeader(),
+                    _buildHeader(settings),
                   ],
                 ));
               } else {
@@ -55,7 +69,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(SettingsController settings) {
     return Container(
       decoration: const BoxDecoration(
           border: Border(top: BorderSide(color: Colors.white, width: 1))),
@@ -69,7 +83,7 @@ class _MainPageState extends State<MainPage> {
             padding: EdgeInsets.only(left: 16.0, right: 6.0),
             child: Icon(Icons.book),
           ),*/
-          Expanded(child: _buildDateSelectorButton()),
+          Expanded(child: _buildDateSelectorButton(settings)),
           Padding(
             padding: const EdgeInsets.only(right: 16.0, left: 4.0),
             child: IconButton(
@@ -107,7 +121,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildDateSelectorButton() {
+  Widget _buildDateSelectorButton(SettingsController settings) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: OutlinedButton.icon(
@@ -137,12 +151,15 @@ class _MainPageState extends State<MainPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          Constants.days[
-                              (_selectedDate ?? DateTime.now()).weekday - 1],
+                          Constants.days[(_getDate(
+                                      preferSunday: settings.getPreferSunday()))
+                                  .weekday -
+                              1],
                           textScaleFactor: 1.25,
                         ),
                         Text(
-                          _formatter.format(_selectedDate ?? DateTime.now()),
+                          _formatter.format(_getDate(
+                              preferSunday: settings.getPreferSunday())),
                           style: const TextStyle(fontWeight: FontWeight.w100),
                         ),
                       ]),

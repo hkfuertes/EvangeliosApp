@@ -33,10 +33,16 @@ class SettingsController with ChangeNotifier {
   }
 
   bool getPreferSunday() => _preferSunday ?? false;
-  setPreferSunday(bool preferSunday) => _preferSunday = preferSunday;
+  setPreferSunday(bool preferSunday) {
+    _preferSunday = preferSunday;
+    notifyListeners();
+  }
 
   double getTextScale() => _textScale ?? 1;
-  setTextScale(double textScale) => _textScale = textScale;
+  setTextScale(double textScale) {
+    _textScale = textScale;
+    notifyListeners();
+  }
 
   static SettingsController of(BuildContext context) =>
       context.read<SettingsController>();
