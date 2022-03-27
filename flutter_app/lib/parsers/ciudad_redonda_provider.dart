@@ -3,9 +3,9 @@ import 'package:html/parser.dart' as Parser;
 import 'package:html/dom.dart';
 
 import '../model/text_sets.dart';
-import 'provider.dart';
+import 'texts_provider.dart';
 
-class CiudadRedondaProvider extends Provider {
+class CiudadRedondaProvider extends TextsProvider {
   @override
   TextsSet parse(String body) {
     var document = Parser.parse(body);
