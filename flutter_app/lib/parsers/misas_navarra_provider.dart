@@ -1,8 +1,8 @@
 import 'package:lecturas/model/text_sets.dart';
 
-import 'provider.dart';
+import 'texts_provider.dart';
 
-class MisasNavarraProvider extends Provider {
+class MisasNavarraProvider extends TextsProvider {
   @override
   String getProviderNameForDisplay() {
     return "Misas Navarra";

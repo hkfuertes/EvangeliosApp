@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lecturas/model/settings_controller.dart';
 import 'package:lecturas/pages/main_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => SettingsController()),
+  ], child: const MyApp()));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      home: const MainPage(),
+      home: MainPage(),
     );
   }
 }

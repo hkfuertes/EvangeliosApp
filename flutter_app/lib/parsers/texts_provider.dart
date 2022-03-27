@@ -3,7 +3,7 @@ import 'dart:async';
 
 import '../model/text_sets.dart';
 
-abstract class Provider {
+abstract class TextsProvider {
   RegExp stripHtmlTagsRegex =
       RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
@@ -18,6 +18,16 @@ abstract class Provider {
         .replaceAll("Palabra del Señor.", ""));
     texts.setDate(date);
     return texts;
+  }
+
+  @override
+  bool operator ==(other) {
+    if (other is! TextsProvider && other is! String) return false;
+    if (other is TextsProvider) {
+      return other.getProviderNameForDisplay() == getProviderNameForDisplay();
+    }
+    if (other is String) return other == getProviderNameForDisplay();
+    return false;
   }
 }
 

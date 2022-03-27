@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:html/parser.dart' as Parser;
 import '../model/text_sets.dart';
-import 'provider.dart';
+import 'texts_provider.dart';
 
-class BuigleProvider extends Provider {
+class BuigleProvider extends TextsProvider {
   RegExp firstRegex =
       RegExp(r'PRIMERA LECTURA.*SALMO', multiLine: true, dotAll: true);
   RegExp secondRegex =
@@ -39,7 +39,7 @@ class BuigleProvider extends Provider {
     return parseFromSection(texts, this);
   }
 
-  static TextsSet parseFromSection(String body, Provider provider) {
+  static TextsSet parseFromSection(String body, TextsProvider provider) {
     var chunk = body.split("PRIMERA LECTURA")[1];
     var firstParts = chunk
         .split("SALMO RESPONSORIAL")[0]
