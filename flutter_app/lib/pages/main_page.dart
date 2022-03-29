@@ -83,8 +83,8 @@ class MainPage extends StatelessWidget {
                 .copyWith(bottomLeft: Radius.zero, bottomRight: Radius.zero)),
         context: context,
         builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
+          return ListView(
+            shrinkWrap: true,
             children: [
               child,
             ],

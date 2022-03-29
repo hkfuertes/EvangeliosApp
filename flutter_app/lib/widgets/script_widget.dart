@@ -79,7 +79,11 @@ class ScriptWidget extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(text.replaceAll("“", '"').replaceAll("”", '"'),
+                Text(
+                    text
+                        .replaceAll("“", '"')
+                        .replaceAll("”", '"')
+                        .replaceAll(".\n", ".\n\n"),
                     textScaleFactor: textScale)
               ],
             ),

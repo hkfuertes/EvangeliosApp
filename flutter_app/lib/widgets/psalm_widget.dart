@@ -51,8 +51,8 @@ class PsalmWidget extends StatelessWidget {
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(
-                                height: 8,
+                              SizedBox(
+                                height: 8 * textScale,
                               ),
                               Text(
                                 e.trim() + " R.",
@@ -60,8 +60,8 @@ class PsalmWidget extends StatelessWidget {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w200),
                               ),
-                              const SizedBox(
-                                height: 8,
+                              SizedBox(
+                                height: 8 * textScale,
                               ),
                             ],
                           ),
@@ -85,21 +85,21 @@ class PsalmWidget extends StatelessWidget {
                 if (quote != null)
                   Text(
                     quote!,
-                    textScaleFactor: 0.8 + textScale,
+                    textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w200),
                   ),
-                const SizedBox(
-                  height: 8,
+                SizedBox(
+                  height: (8 * textScale),
                 ),
                 ...texts
                     .map((e) => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.0 * textScale),
                               child: Text(
                                 "V. " + repeat.trim(),
                                 textScaleFactor: textScale,
