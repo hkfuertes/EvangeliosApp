@@ -8,12 +8,14 @@ class PsalmWidget extends StatelessWidget {
   final String repeat;
   final List<String> texts;
   final bool asExpandableTile;
+  final double textScale;
   const PsalmWidget(
       {Key? key,
       required this.texts,
       required this.repeat,
       this.asExpandableTile = false,
       required this.title,
+      this.textScale = 1,
       this.quote})
       : super(key: key);
 
@@ -29,7 +31,7 @@ class PsalmWidget extends StatelessWidget {
             subtitle: (quote != null)
                 ? Text(
                     quote!,
-                    textScaleFactor: 0.8,
+                    textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w200),
@@ -44,6 +46,7 @@ class PsalmWidget extends StatelessWidget {
                             children: [
                               Text(
                                 "V. " + repeat.trim(),
+                                textScaleFactor: textScale,
                                 style: const TextStyle(
                                     fontStyle: FontStyle.italic,
                                     fontWeight: FontWeight.bold),
@@ -53,6 +56,7 @@ class PsalmWidget extends StatelessWidget {
                               ),
                               Text(
                                 e.trim() + " R.",
+                                textScaleFactor: textScale,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w200),
                               ),
@@ -75,13 +79,13 @@ class PsalmWidget extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  textScaleFactor: 1.25,
+                  textScaleFactor: 1.25 * textScale,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 if (quote != null)
                   Text(
                     quote!,
-                    textScaleFactor: 0.8,
+                    textScaleFactor: 0.8 + textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w200),
@@ -98,6 +102,7 @@ class PsalmWidget extends StatelessWidget {
                                   const EdgeInsets.symmetric(vertical: 8.0),
                               child: Text(
                                 "V. " + repeat.trim(),
+                                textScaleFactor: textScale,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic),
@@ -105,6 +110,7 @@ class PsalmWidget extends StatelessWidget {
                             ),
                             Text(
                               e.trim() + " R.",
+                              textScaleFactor: textScale,
                             ),
                           ],
                         ))

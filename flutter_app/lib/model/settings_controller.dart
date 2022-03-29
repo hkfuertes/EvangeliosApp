@@ -11,6 +11,8 @@ class SettingsController with ChangeNotifier {
   bool? _preferSunday;
   double? _textScale;
 
+  DateTime? currentDate;
+
   static final List<TextsProvider> _providers = [
     BuigleProvider(),
     CiudadRedondaProvider()
@@ -38,7 +40,7 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
   }
 
-  double getTextScale() => _textScale ?? 1;
+  double getTextScale() => _textScale ?? 1.25;
   setTextScale(double textScale) {
     _textScale = textScale;
     notifyListeners();
@@ -46,4 +48,15 @@ class SettingsController with ChangeNotifier {
 
   static SettingsController of(BuildContext context) =>
       context.read<SettingsController>();
+
+  DateTime getDate() {
+    if (currentDate != null) {
+      return currentDate!;
+    } else {
+      var now = DateTime.now();
+      return (getPreferSunday() && now.hour > 19)
+          ? now.add(const Duration(days: 1))
+          : now;
+    }
+  }
 }

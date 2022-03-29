@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lecturas/model/settings_controller.dart';
-
-import '../parsers/buigle_provider.dart';
-import '../parsers/ciudad_redonda_provider.dart';
+import 'package:provider/provider.dart';
 import '../parsers/texts_provider.dart';
 
 class SettingsPanel extends StatelessWidget {
@@ -10,6 +8,7 @@ class SettingsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingsController settings = context.watch<SettingsController>();
     return Padding(
       padding: const EdgeInsets.all(8).copyWith(bottom: 32),
       child: Column(
@@ -23,7 +22,7 @@ class SettingsPanel extends StatelessWidget {
               style: Theme.of(context).textTheme.caption,
             ),
           ),
-          ..._providerWidgets(),
+          ..._providerWidgets(context, settings),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
@@ -31,27 +30,58 @@ class SettingsPanel extends StatelessWidget {
               style: Theme.of(context).textTheme.caption,
             ),
           ),
-          const SwitchListTile(
-            value: false,
-            onChanged: null,
-            title: Text("Visperas"),
-            subtitle: Text("Mostrar el dia siguiente después 19.00"),
+          SwitchListTile(
+            dense: true,
+            value: settings.getPreferSunday(),
+            onChanged: (value) {
+              settings.setPreferSunday(value);
+            },
+            title: const Text("Vispera de festivo"),
+            subtitle: const Text("Mostrar el dia siguiente pasadas las 19h"),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              children: [
+                const Icon(Icons.font_download),
+                Expanded(
+                  child: SliderTheme(
+                    data: const SliderThemeData(trackHeight: 0.5),
+                    child: Slider(
+                        activeColor: Colors.white,
+                        inactiveColor: Colors.white.withOpacity(0.5),
+                        value: settings.getTextScale(),
+                        min: 0.5,
+                        max: 2,
+                        divisions: 6,
+                        label: "${settings.getTextScale()}",
+                        onChanged: (value) => settings.setTextScale(value)),
+                  ),
+                ),
+              ],
+            ),
           )
         ],
       ),
     );
   }
 
-  List<Widget> _providerWidgets() {
+  List<Widget> _providerWidgets(
+      BuildContext context, SettingsController settings) {
     return SettingsController.getAvailableProviders()
         .values
         .map((value) => RadioListTile<TextsProvider>(
               value: value,
-              groupValue: null,
+              groupValue: settings.getProvider(),
               onChanged: (selected) {
-                if (selected != null) {}
+                if (selected != null) {
+                  settings.setProvider(selected);
+                  Navigator.of(context).pop();
+                }
               },
+              dense: true,
               title: Text(value.getProviderNameForDisplay()),
+              subtitle: Text(value.getUrlForDisplay()),
             ))
         .toList();
   }

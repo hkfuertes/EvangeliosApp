@@ -29,9 +29,12 @@ abstract class TextsProvider {
     if (other is String) return other == getProviderNameForDisplay();
     return false;
   }
-}
 
-class Providers {
-  static const int CiudadRedonda = 0x01;
-  static const int Buigle = 0x02;
+  String getUrlForDisplay() {
+    var url = getProviderUrlForDate(DateTime.now());
+    var https = url.contains("https");
+    url = url.replaceAll("https://", "");
+    url = url.replaceAll("http://", "");
+    return ((https) ? "https://" : "http://") + url.split("/")[0];
+  }
 }

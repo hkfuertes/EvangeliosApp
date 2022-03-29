@@ -3,49 +3,30 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lecturas/constants.dart';
 import 'package:lecturas/model/settings_controller.dart';
+import 'package:lecturas/panels/date_selector_panel.dart';
 import 'package:lecturas/panels/settings_panel.dart';
-import 'package:lecturas/parsers/buigle_provider.dart';
 import 'package:lecturas/widgets/psalm_widget.dart';
 import 'package:lecturas/widgets/script_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../model/text_sets.dart';
-import '../parsers/texts_provider.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MainPage extends StatelessWidget {
+  MainPage({Key? key}) : super(key: key);
 
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  DateTime? _selectedDate;
   final DateFormat _formatter = DateFormat('dd/MM/yyyy');
-  TextsProvider _currentProvider = BuigleProvider();
-
-  DateTime _getDate({preferSunday = false}) {
-    if (_selectedDate != null) {
-      return _selectedDate!;
-    } else {
-      var now = DateTime.now();
-      return (preferSunday && now.hour > 19)
-          ? now.add(const Duration(days: 1))
-          : now;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    var settings = SettingsController.of(context);
+    SettingsController settings = context.watch<SettingsController>();
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor),
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: FutureBuilder<TextsSet>(
-            future: settings
-                .getProvider()
-                .get(_getDate(preferSunday: settings.getPreferSunday())),
+            future: settings.getProvider().get(settings.getDate()),
             builder: (context, snapshot) {
               if (snapshot.hasData && snapshot.data != null) {
                 return SafeArea(
@@ -53,10 +34,13 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     Expanded(
                       child: ListView(
-                        children: _textsSetToList(snapshot.data!),
+                        children: _textsSetToList(snapshot.data!,
+                            textScale: settings.getTextScale()),
                       ),
                     ),
-                    _buildHeader(settings),
+                    Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        child: _buildHeader(context, settings)),
                   ],
                 ));
               } else {
@@ -69,7 +53,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildHeader(SettingsController settings) {
+  Widget _buildHeader(BuildContext context, SettingsController settings) {
     return Container(
       decoration: const BoxDecoration(
           border: Border(top: BorderSide(color: Colors.white, width: 1))),
@@ -78,41 +62,12 @@ class _MainPageState extends State<MainPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
-          /*
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, right: 6.0),
-            child: Icon(Icons.book),
-          ),*/
-          Expanded(child: _buildDateSelectorButton(settings)),
+          Expanded(child: _buildDateSelectorButton(context, settings)),
           Padding(
             padding: const EdgeInsets.only(right: 16.0, left: 4.0),
             child: IconButton(
                 onPressed: () {
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8))
-                                  .copyWith(
-                                      bottomLeft: Radius.zero,
-                                      bottomRight: Radius.zero)),
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            /*
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 64),
-                              child: Container(
-                                color: Colors.white.withOpacity(0.5),
-                                height: 2,
-                              ),
-                            ),*/
-                            SettingsPanel(),
-                          ],
-                        );
-                      });
+                  _showCustomModalBottomSheet(context, SettingsPanel());
                 },
                 icon: const Icon(Icons.settings)),
           )
@@ -121,25 +76,39 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _buildDateSelectorButton(SettingsController settings) {
+  _showCustomModalBottomSheet(BuildContext context, Widget child) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(8))
+                .copyWith(bottomLeft: Radius.zero, bottomRight: Radius.zero)),
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              child,
+            ],
+          );
+        });
+  }
+
+  Widget _buildDateSelectorButton(
+      BuildContext context, SettingsController settings) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: OutlinedButton.icon(
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Colors.white)),
           onPressed: () {
-            showDatePicker(
-                    locale: const Locale("es", "ES"),
-                    context: context,
-                    initialDate: _selectedDate ?? DateTime.now(),
-                    firstDate:
-                        DateTime.now().subtract(const Duration(days: 365)),
-                    lastDate: DateTime.now().add(const Duration(days: 365)))
-                .then((value) {
-              setState(() {
-                _selectedDate = value;
-              });
-            });
+            _showCustomModalBottomSheet(
+                context,
+                DateSelectorPanel(
+                  initialDate: settings.getDate(),
+                  onDatePicked: (date) {
+                    settings.currentDate = date;
+                    settings.notifyListeners();
+                  },
+                ));
           },
           icon: const Icon(Icons.calendar_month_outlined),
           label: Row(
@@ -151,15 +120,11 @@ class _MainPageState extends State<MainPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          Constants.days[(_getDate(
-                                      preferSunday: settings.getPreferSunday()))
-                                  .weekday -
-                              1],
+                          Constants.days[settings.getDate().weekday - 1],
                           textScaleFactor: 1.25,
                         ),
                         Text(
-                          _formatter.format(_getDate(
-                              preferSunday: settings.getPreferSunday())),
+                          _formatter.format(settings.getDate()),
                           style: const TextStyle(fontWeight: FontWeight.w100),
                         ),
                       ]),
@@ -170,37 +135,39 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  List<Widget> _textsSetToList(TextsSet set, {asExpandableTile = false}) {
+  List<Widget> _textsSetToList(TextsSet set,
+      {asExpandableTile = false, textScale = 1}) {
     return [
       ScriptWidget(
         text: set.first,
         quote: set.firstIndex,
         title: "Primera Lectura",
         asExpandableTile: asExpandableTile,
+        textScale: textScale,
       ),
       const Divider(),
       PsalmWidget(
-        texts: set.psalm.split("\n\n"),
-        repeat: set.psalmResponse,
-        quote: set.psalmIndex,
-        title: "Salmo Responsorial",
-        asExpandableTile: asExpandableTile,
-      ),
+          texts: set.psalm.split("\n\n"),
+          repeat: set.psalmResponse,
+          quote: set.psalmIndex,
+          title: "Salmo Responsorial",
+          asExpandableTile: asExpandableTile,
+          textScale: textScale),
       const Divider(),
       if (set.second != null)
         ScriptWidget(
-          text: set.second!,
-          quote: set.secondIndex!,
-          title: "Segunda Lectura",
-          asExpandableTile: asExpandableTile,
-        ),
+            text: set.second!,
+            quote: set.secondIndex!,
+            title: "Segunda Lectura",
+            asExpandableTile: asExpandableTile,
+            textScale: textScale),
       if (set.second != null) const Divider(),
       ScriptWidget(
-        text: set.godspel,
-        quote: set.godspelIndex,
-        title: "Evangelio",
-        asExpandableTile: asExpandableTile,
-      )
+          text: set.godspel,
+          quote: set.godspelIndex,
+          title: "Evangelio",
+          asExpandableTile: asExpandableTile,
+          textScale: textScale)
     ];
   }
 }

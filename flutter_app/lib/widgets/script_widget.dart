@@ -7,11 +7,13 @@ class ScriptWidget extends StatelessWidget {
   final String? quote;
   final String text;
   final bool asExpandableTile;
+  final double textScale;
   const ScriptWidget(
       {Key? key,
       required this.text,
       required this.title,
       this.quote,
+      this.textScale = 1,
       this.asExpandableTile = false})
       : super(key: key);
 
@@ -23,12 +25,15 @@ class ScriptWidget extends StatelessWidget {
             iconColor: Colors.white,
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            title: Text(title),
+            title: Text(
+              title,
+              textScaleFactor: textScale,
+            ),
             subtitle: (quote != null)
                 ? Text(
                     quote!,
                     overflow: TextOverflow.ellipsis,
-                    textScaleFactor: 0.8,
+                    textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w100),
@@ -40,6 +45,7 @@ class ScriptWidget extends StatelessWidget {
                   Expanded(
                     child: Text(
                       text.replaceAll(".\n", ".\n\n"),
+                      textScaleFactor: textScale,
                       style: const TextStyle(fontWeight: FontWeight.w100),
                     ),
                   ),
@@ -59,13 +65,13 @@ class ScriptWidget extends StatelessWidget {
               children: [
                 Text(
                   title.toUpperCase(),
-                  textScaleFactor: 1.25,
+                  textScaleFactor: 1.25 * textScale,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 if (quote != null)
                   Text(
                     quote!,
-                    textScaleFactor: 0.8,
+                    textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w200),
@@ -73,7 +79,8 @@ class ScriptWidget extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(text.replaceAll("“", '"').replaceAll("”", '"'))
+                Text(text.replaceAll("“", '"').replaceAll("”", '"'),
+                    textScaleFactor: textScale)
               ],
             ),
           );
