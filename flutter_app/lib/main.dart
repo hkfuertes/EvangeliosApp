@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:json_theme/json_theme.dart';
 import 'package:lecturas/model/catholic_calendar.dart';
 import 'package:lecturas/model/settings_controller.dart';
 import 'package:lecturas/pages/main_page.dart';
