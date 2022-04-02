@@ -119,11 +119,4 @@ class PsalmWidget extends StatelessWidget {
             ),
           );
   }
-
-  static PsalmWidget makeDummy() => const PsalmWidget(
-        texts: [Constants.lorem, Constants.lorem],
-        repeat: "El señor es mi pastor",
-        title: "Salmo",
-        quote: "Col. 1-25",
-      );
 }

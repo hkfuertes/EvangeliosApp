@@ -89,12 +89,4 @@ class ScriptWidget extends StatelessWidget {
             ),
           );
   }
-
-  static List<ScriptWidget> makeDummy({count = 3}) => List.generate(
-      count,
-      (index) => ScriptWidget(
-            text: Constants.lorem,
-            title: "${index + 1}º Lectura",
-            quote: "Col. 1-25",
-          ));
 }

@@ -48,7 +48,7 @@ class SettingsPanel extends StatelessWidget {
                   child: SliderTheme(
                     data: const SliderThemeData(trackHeight: 0.5),
                     child: Slider(
-                        activeColor: Theme.of(context).primaryColorLight,
+                        activeColor: Colors.white,
                         inactiveColor: Colors.white.withOpacity(0.5),
                         value: settings.getTextScale(),
                         min: 0.5,
