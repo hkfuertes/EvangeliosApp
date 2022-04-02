@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lecturas/parsers/buigle_provider.dart';
 import 'package:lecturas/parsers/ciudad_redonda_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../parsers/texts_provider.dart';
 
@@ -35,13 +36,13 @@ class SettingsController with ChangeNotifier {
   }
 
   bool getPreferSunday() => _preferSunday ?? false;
-  setPreferSunday(bool preferSunday) {
+  setPreferSunday(bool? preferSunday) {
     _preferSunday = preferSunday;
     notifyListeners();
   }
 
   double getTextScale() => _textScale ?? 1.25;
-  setTextScale(double textScale) {
+  setTextScale(double? textScale) {
     _textScale = textScale;
     notifyListeners();
   }
@@ -58,5 +59,29 @@ class SettingsController with ChangeNotifier {
           ? now.add(const Duration(days: 1))
           : now;
     }
+  }
+
+  @override
+  void notifyListeners() {
+    //We save everytime we repaint.
+    super.notifyListeners();
+    saveSettings();
+  }
+
+  Future saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("preferSunday", getPreferSunday());
+    await prefs.setDouble("textScale", getTextScale());
+    await prefs.setString(
+        "provider", _provider ?? _providers[0].getProviderNameForDisplay());
+  }
+
+  static Future<SettingsController> fromPrefs() async {
+    var settings = SettingsController();
+    final prefs = await SharedPreferences.getInstance();
+    settings.setPreferSunday(prefs.getBool("preferSunday"));
+    settings.setProvider(prefs.getString("provider"));
+    settings.setTextScale(prefs.getDouble("textScale"));
+    return settings;
   }
 }

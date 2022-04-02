@@ -3,7 +3,7 @@ import 'package:lecturas/constants.dart';
 
 class DateSelectorPanel extends StatefulWidget {
   final DateTime initialDate;
-  final Function(DateTime)? onDatePicked;
+  final Function(DateTime?)? onDatePicked;
   DateTime date;
   DateSelectorPanel({Key? key, required this.initialDate, this.onDatePicked})
       : date = initialDate,
@@ -83,7 +83,7 @@ class _DateSelectorPanelState extends State<DateSelectorPanel> {
                 IconButton(
                     onPressed: () {
                       if (widget.onDatePicked != null) {
-                        widget.onDatePicked!(getDate());
+                        widget.onDatePicked!(_getDateOrNull(getDate()));
                         Navigator.of(context).pop();
                       }
                     },
@@ -137,6 +137,21 @@ class _DateSelectorPanelState extends State<DateSelectorPanel> {
         ].reversed.toList(),
       ),
     );
+  }
+
+  //If selected date is today we return null "no date selected",
+  //so preferSunday can apply.
+  DateTime? _getDateOrNull(DateTime? datetime) {
+    if (datetime == null) {
+      return null;
+    } else {
+      var now = DateTime.now();
+      return (datetime.year == now.year &&
+              datetime.month == now.month &&
+              datetime.day == now.day)
+          ? null
+          : datetime;
+    }
   }
 
   Column textWithButtons(
