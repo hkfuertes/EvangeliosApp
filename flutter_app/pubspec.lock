@@ -177,27 +177,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
-  json_class:
-    dependency: transitive
-    description:
-      name: json_class
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.2+4"
-  json_schema2:
-    dependency: transitive
-    description:
-      name: json_schema2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1+2"
-  json_theme:
-    dependency: "direct main"
-    description:
-      name: json_theme
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.3.1"
   lints:
     dependency: transitive
     description:
@@ -205,13 +184,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   matcher:
     dependency: transitive
     description:
@@ -303,20 +275,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.2"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1+1"
-  rest_client:
-    dependency: transitive
-    description:
-      name: rest_client
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -427,20 +385,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  uri:
-    dependency: transitive
-    description:
-      name: uri
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  uuid:
-    dependency: transitive
-    description:
-      name: uuid
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.6"
   vector_math:
     dependency: transitive
     description:
