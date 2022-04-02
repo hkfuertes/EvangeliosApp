@@ -27,6 +27,18 @@ class Constants {
     "Diciembre"
   ];
 
+  static final ThemeData _baseTheme = ThemeData(
+      brightness: Brightness.dark,
+      //iconTheme: IconThemeData(color: swatch.shade50.lighten()),
+      switchTheme: SwitchThemeData(
+          thumbColor: MaterialStateProperty.all(Colors.white),
+          trackColor: MaterialStateProperty.resolveWith((states) =>
+              (states.contains(MaterialState.selected)
+                  ? Colors.white.withOpacity(0.7)
+                  : Colors.white.withOpacity(0.3)))),
+      radioTheme:
+          RadioThemeData(fillColor: MaterialStateProperty.all(Colors.white)));
+
   static ThemeData getThemeFromCalendar() {
     var color = Festivity.GREEN;
     var byDateTime =
@@ -50,26 +62,17 @@ class Constants {
     }
 
     if (color == Festivity.WHITE) {
-      return ThemeData.dark();
-    }
-
-    var swatch = createMaterialColor(Color(color));
-    return ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: swatch,
+      return _baseTheme;
+    } else {
+      var swatch = createMaterialColor(Color(color));
+      return _baseTheme.copyWith(
+        //primarySwatch: swatch,
         scaffoldBackgroundColor: swatch.shade900.darken(),
         bottomAppBarColor: swatch.shade900.darken(),
         bottomSheetTheme:
             BottomSheetThemeData(backgroundColor: swatch.shade900.darken()),
-        //iconTheme: IconThemeData(color: swatch.shade50.lighten()),
-        switchTheme: SwitchThemeData(
-            thumbColor: MaterialStateProperty.all(Colors.white),
-            trackColor: MaterialStateProperty.resolveWith((states) =>
-                (states.contains(MaterialState.selected)
-                    ? Colors.white.withOpacity(0.7)
-                    : Colors.white.withOpacity(0.3)))),
-        radioTheme:
-            RadioThemeData(fillColor: MaterialStateProperty.all(Colors.white)));
+      );
+    }
   }
 
   static MaterialColor createMaterialColor(Color color) {
