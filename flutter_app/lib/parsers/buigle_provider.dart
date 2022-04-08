@@ -84,7 +84,7 @@ class BuigleProvider extends TextsProvider {
             .replaceAll("R.", "\n"),
         psalmIndex: "Salmo " + psalmParts[0].trim(),
         psalmResponse: psalmParts[1].replaceAll("R.", "").trim(),
-        godspel: godspelParts.sublist(2, godspelParts.length - 2).join("\n"),
+        godspel: godspelParts.sublist(2).join("\n"),
         godspelIndex: godspelParts[1].trim());
   }
 }

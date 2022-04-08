@@ -39,24 +39,24 @@ class Constants {
       radioTheme:
           RadioThemeData(fillColor: MaterialStateProperty.all(Colors.white)));
 
-  static ThemeData getThemeFromCalendar() {
+  static ThemeData getThemeFromCalendar({DateTime? date}) {
     var color = Festivity.GREEN;
+    var dateToUse = date ?? DateTime.now();
     var byDateTime =
-        CatholicCalendar.getFestivitiesAsDateTimeMap(DateTime.now().year);
-    var byName = CatholicCalendar.getFestivitiesAsNameMap(DateTime.now().year);
+        CatholicCalendar.getFestivitiesAsDateTimeMap(dateToUse.year);
+    var byName = CatholicCalendar.getFestivitiesAsNameMap(dateToUse.year);
     //Check if date is specific if not check periods
-    if (byDateTime.containsKey(DateTime.now())) {
-      color = byDateTime[DateTime.now()]!.color ?? Festivity.GREEN;
+    if (byDateTime.containsKey(dateToUse)) {
+      color = byDateTime[dateToUse]!.color ?? Festivity.GREEN;
     } else {
       var ashWednesday = byName["ashWednesday"]!;
       var easter = byName["easter"]!;
       var advent1 = byName["advent1"]!;
       var christmas = byName["christmas"]!;
-      if (Festivity.isDateBetweenFestivities(
-          ashWednesday, easter, DateTime.now())) {
+      if (Festivity.isDateBetweenFestivities(ashWednesday, easter, dateToUse)) {
         color = ashWednesday.color ?? Festivity.PURPLE;
       } else if (Festivity.isDateBetweenFestivities(
-          advent1, christmas, DateTime.now())) {
+          advent1, christmas, dateToUse)) {
         color = advent1.color ?? Festivity.PURPLE;
       }
     }

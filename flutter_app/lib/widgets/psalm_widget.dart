@@ -27,9 +27,9 @@ class PsalmWidget extends StatelessWidget {
             iconColor: Colors.white,
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            title: Text(title),
+            title: SelectableText(title),
             subtitle: (quote != null)
-                ? Text(
+                ? SelectableText(
                     quote!,
                     textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
@@ -44,7 +44,7 @@ class PsalmWidget extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              SelectableText(
                                 "V. " + repeat.trim(),
                                 textScaleFactor: textScale,
                                 style: const TextStyle(
@@ -54,7 +54,7 @@ class PsalmWidget extends StatelessWidget {
                               SizedBox(
                                 height: 8 * textScale,
                               ),
-                              Text(
+                              SelectableText(
                                 e.trim() + " R.",
                                 textScaleFactor: textScale,
                                 style: const TextStyle(
@@ -77,13 +77,13 @@ class PsalmWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                SelectableText(
                   title,
                   textScaleFactor: 1.25 * textScale,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 if (quote != null)
-                  Text(
+                  SelectableText(
                     quote!,
                     textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
@@ -100,7 +100,7 @@ class PsalmWidget extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   vertical: 8.0 * textScale),
-                              child: Text(
+                              child: SelectableText(
                                 "V. " + repeat.trim(),
                                 textScaleFactor: textScale,
                                 style: const TextStyle(
@@ -108,7 +108,7 @@ class PsalmWidget extends StatelessWidget {
                                     fontStyle: FontStyle.italic),
                               ),
                             ),
-                            Text(
+                            SelectableText(
                               e.trim() + " R.",
                               textScaleFactor: textScale,
                             ),

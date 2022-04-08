@@ -47,7 +47,7 @@ class _DateSelectorPanelState extends State<DateSelectorPanel> {
                     onDownPressed: () {
                       setState(() {
                         date = DateTime(
-                            getDate().year, getDate().month, getDate().day + 1);
+                            getDate().year, getDate().month, getDate().day - 1);
                       });
                     },
                     text: getDate().day.toString()),

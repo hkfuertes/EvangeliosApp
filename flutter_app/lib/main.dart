@@ -31,13 +31,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var date = context.watch<SettingsController>().getDate();
     return MaterialApp(
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [
         Locale('es', 'ES'),
       ],
       title: 'Lecturas',
-      theme: Constants.getThemeFromCalendar(),
+      theme: Constants.getThemeFromCalendar(date: date),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       home: MainPage(),

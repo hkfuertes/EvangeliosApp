@@ -25,14 +25,14 @@ class ScriptWidget extends StatelessWidget {
             iconColor: Colors.white,
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             childrenPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            title: Text(
+            title: SelectableText(
               title,
               textScaleFactor: textScale,
             ),
             subtitle: (quote != null)
-                ? Text(
+                ? SelectableText(
                     quote!,
-                    overflow: TextOverflow.ellipsis,
+                    //overflow: TextOverflow.ellipsis,
                     textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
                         fontStyle: FontStyle.italic,
@@ -43,7 +43,7 @@ class ScriptWidget extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
+                    child: SelectableText(
                       text.replaceAll(".\n", ".\n\n"),
                       textScaleFactor: textScale,
                       style: const TextStyle(fontWeight: FontWeight.w100),
@@ -63,13 +63,13 @@ class ScriptWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                SelectableText(
                   title.toUpperCase(),
                   textScaleFactor: 1.25 * textScale,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 if (quote != null)
-                  Text(
+                  SelectableText(
                     quote!,
                     textScaleFactor: 0.8 * textScale,
                     style: const TextStyle(
@@ -79,7 +79,7 @@ class ScriptWidget extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                Text(
+                SelectableText(
                     text
                         .replaceAll("“", '"')
                         .replaceAll("”", '"')

@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:html/parser.dart' as Parser;
 import 'package:html/dom.dart';
+import 'package:lecturas/parsers/parsers_string_extensions.dart';
 
 import '../model/text_sets.dart';
 import 'texts_provider.dart';
@@ -8,31 +9,67 @@ import 'texts_provider.dart';
 class CiudadRedondaProvider extends TextsProvider {
   @override
   TextsSet parse(String body) {
-    var document = Parser.parse(body);
-    List<Element> texts = document.querySelectorAll('div.texto_palabra');
-    if (texts.length > 3) {
-      //Sunday
+    var elements = Parser.parse(body).querySelectorAll("div.texto_palabra");
+    if (elements.length <= 3) {
       return TextsSet(
-          from: getProviderNameForDisplay(),
-          first: getText(texts[0]),
-          firstIndex: getTextIndex(texts[0]),
-          second: getText(texts[2]),
-          secondIndex: getTextIndex(texts[2]),
-          psalm: getPsalm(texts[1]),
-          psalmIndex: getPsalmIndex(texts[1]),
-          psalmResponse: getPsalmResponse(texts[1]),
-          godspel: getText(texts[3]),
-          godspelIndex: getTextIndex(texts[3]));
+          first: elements[0].text.cleanHtml().split("\n").sublist(1).join("\n"),
+          firstIndex: elements[0].text.cleanHtml().split("\n")[0],
+          psalm: elements[1]
+              .text
+              .cleanHtml(removeDouble: false)
+              .split("\n")
+              .sublist(2)
+              .join("\n")
+              .replaceAll("R/.", "\n")
+              .replaceAll("R.", "\n")
+              .replaceAll("V/.", "")
+              .replaceAll("V.", "")
+              .trimEachLine(),
+          psalmIndex:
+              elements[1].text.cleanHtml(removeDouble: false).split("\n")[0],
+          psalmResponse: elements[1]
+              .text
+              .cleanHtml(removeDouble: false)
+              .split("\n")[1]
+              .replaceAll("R/.", "")
+              .replaceAll("R.", "")
+              .replaceAll("V/.", "")
+              .replaceAll("V.", "")
+              .trim(),
+          godspel:
+              elements[2].text.cleanHtml().split("\n").sublist(1).join("\n"),
+          godspelIndex: elements[2].text.cleanHtml().split("\n")[0],
+          from: getProviderNameForDisplay());
     } else {
       return TextsSet(
-          from: getProviderNameForDisplay(),
-          first: getText(texts[0]),
-          firstIndex: getTextIndex(texts[0]),
-          psalm: getPsalm(texts[1]),
-          psalmIndex: getPsalmIndex(texts[1]),
-          psalmResponse: getPsalmResponse(texts[1]),
-          godspel: getText(texts[2]),
-          godspelIndex: getTextIndex(texts[2]));
+          first: elements[0].text.cleanHtml().split("\n").sublist(1).join("\n"),
+          firstIndex: elements[0].text.cleanHtml().split("\n")[0],
+          psalm: elements[1]
+              .text
+              .cleanHtml()
+              .split("\n")
+              .sublist(2)
+              .join("\n")
+              .replaceAll("R/.", "\n")
+              .replaceAll("R.", "\n")
+              .replaceAll("V/.", "")
+              .replaceAll("V.", "")
+              .trimEachLine(),
+          psalmIndex: elements[1].text.cleanHtml().split("\n")[0],
+          psalmResponse: elements[1]
+              .text
+              .cleanHtml()
+              .split("\n")[1]
+              .replaceAll("R/.", "")
+              .replaceAll("R.", "")
+              .trim(),
+          second:
+              elements[2].text.cleanHtml().split("\n").sublist(1).join("\n"),
+          secondIndex: elements[2].text.cleanHtml().split("\n")[0],
+          godspel:
+              elements[3].text.cleanHtml().split("\n").sublist(1).join("\n"),
+          godspelIndex: elements[3].text.cleanHtml().split("\n")[0],
+          from: getProviderNameForDisplay());
     }
   }
 
@@ -41,57 +78,6 @@ class CiudadRedondaProvider extends TextsProvider {
     var formatter = DateFormat('yyyy-MM-dd');
     return "https://www.ciudadredonda.org/calendario-lecturas/evangelio-del-dia/?f=" +
         formatter.format(date);
-  }
-
-  String getPsalm(Element element) {
-    return element.text
-        .replaceAll("<br>", "\n")
-        //.replaceAll("\n\n", "\n")
-        .replaceAll(getPsalmIndex(element), "")
-        .replaceAll(getPsalmResponse(element), "")
-        .replaceAll("R/.", "")
-        .replaceAll("V/. ", "")
-        .trim();
-  }
-
-  String getPsalmIndex(Element element) {
-    return element
-            .querySelector("b")
-            ?.innerHtml
-            .replaceAll("<br>\n<br>\nR/.", "") ??
-        "N/A";
-  }
-
-  String getPsalmResponse(Element element) {
-    var el = element.querySelector("i");
-    if (el != null) {
-      return el.text.trim();
-    } else {
-      return "N/A";
-    }
-  }
-
-  String getText(Element element) {
-    return element.innerHtml
-        //.replaceAll("\n", "")
-        .replaceAll("</b>.<br>", "</b><br>")
-        .replaceAll("<br>", "\n")
-        .replaceAll("\n\n", "\n")
-        .replaceAll(element.querySelector("b")?.outerHtml ?? "", "")
-        .replaceAll("<b>Palabra de Dios</b>", "")
-        .replaceAll("<b>Palabra del Señor</b>", "")
-        .replaceAll(super.stripHtmlTagsRegex, "")
-        .trim();
-  }
-
-  String getTextIndex(Element element) {
-    return element.querySelector("b")?.text.replaceAll(":", "") ?? "N/A";
-  }
-
-  String removeAllHtmlTags(String htmlText) {
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
-    return htmlText.replaceAll(exp, '');
   }
 
   @override
