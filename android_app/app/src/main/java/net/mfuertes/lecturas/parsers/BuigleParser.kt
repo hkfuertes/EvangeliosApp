@@ -9,7 +9,7 @@ import java.util.*
 
 class BuigleParser : Parser() {
     override fun parse(body: String): Texts {
-        val doc: Document = Jsoup.connect("http://www.tutorialspoint.com/").get()
+        val doc: Document = Jsoup.parse(body)
         val text: String = doc.select("table.texto2 tbody tr td div")[1].select("div")[0].html()
 
         /*************/
@@ -29,6 +29,7 @@ class BuigleParser : Parser() {
             .filter { it.isNotEmpty() && it.isNotBlank() }
         var godspelParts = chunk
             .split("EVANGELIO")[1]
+            .split("Palabra del Señor")[0]
             .replace("<br>", "\n")
             .trim()
             .split("\n")
